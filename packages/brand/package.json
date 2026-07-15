@@ -1,0 +1,10 @@
+{
+  "name": "@vantrow/brand",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/brand.config.ts",
+  "types": "./src/brand.config.ts",
+  "exports": {
+    ".": "./src/brand.config.ts"
+  }
+}

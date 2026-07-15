@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+/*
+ * Brand color tokens.
+ *
+ * The actual values for the --brand-* custom properties are injected into
+ * :root by the root layout via brandCssVars(brand) from @vantrow/brand.
+ * Tailwind color utilities below resolve to those variables, so a brand
+ * swap requires zero Tailwind or CSS changes — only the brand package.
+ */
+@theme inline {
+  --color-brand: var(--brand-primary);
+  --color-brand-dark: var(--brand-primary-dark);
+  --color-brand-accent: var(--brand-accent);
+  --color-background: var(--brand-background);
+  --color-foreground: var(--brand-foreground);
+  --color-muted: var(--brand-muted);
+}
+
+body {
+  background-color: var(--brand-background);
+  color: var(--brand-foreground);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+}
+
+/*
+ * Honeypot field: visually removed without display:none so naive bots still
+ * see and fill it. Paired with tabIndex={-1}, aria-hidden and autocomplete
+ * off on the input itself.
+ */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
