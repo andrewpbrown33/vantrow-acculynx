@@ -4,9 +4,13 @@
   "packageManager": "pnpm@10.33.0",
   "scripts": {
     "dev": "pnpm --filter site dev",
-    "build": "pnpm --filter site build",
+    "dev:platform": "pnpm --filter platform dev",
+    "build": "pnpm --filter site build && pnpm --filter platform build",
+    "build:platform": "pnpm --filter platform build",
     "start": "pnpm --filter site start",
-    "lint": "pnpm --filter site lint",
-    "typecheck": "pnpm --filter site exec tsc --noEmit"
+    "lint": "pnpm --filter site lint && pnpm --filter platform lint",
+    "lint:platform": "pnpm --filter platform lint",
+    "typecheck": "pnpm --filter site exec tsc --noEmit && pnpm --filter platform exec tsc --noEmit",
+    "typecheck:platform": "pnpm --filter platform exec tsc --noEmit"
   }
 }
