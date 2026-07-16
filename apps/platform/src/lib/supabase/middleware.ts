@@ -3,8 +3,10 @@ import { NextResponse, type NextRequest } from "next/server";
 
 /**
  * Paths that must stay reachable WITHOUT a session when Supabase is configured:
- * the auth pages and the public tokenized e-sign flow, plus Next internals and
- * static assets (excluded by the matcher, guarded here too for safety).
+ * the auth pages, the email-confirmation callback (/auth/confirm, which runs
+ * before any session exists), and the public tokenized e-sign flow, plus Next
+ * internals and static assets (excluded by the matcher, guarded here too for
+ * safety).
  */
 function isPublicPath(pathname: string): boolean {
   return (
@@ -12,6 +14,7 @@ function isPublicPath(pathname: string): boolean {
     pathname.startsWith("/login/") ||
     pathname === "/signup" ||
     pathname.startsWith("/signup/") ||
+    pathname.startsWith("/auth/") ||
     pathname.startsWith("/sign/") ||
     pathname.startsWith("/_next/") ||
     pathname.startsWith("/api/") ||
