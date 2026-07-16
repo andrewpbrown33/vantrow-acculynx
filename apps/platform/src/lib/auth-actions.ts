@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerSupabase, isSupabaseConfigured } from "./supabase/server";
 import { createServiceSupabase } from "./supabase/service";
@@ -81,6 +82,13 @@ export async function signUp(
     return { error: "Please fill in your name, company, email, and password." };
   }
 
+  // Derive the site origin from the request so the confirmation email links back
+  // to THIS deployment's /auth/confirm callback (handles preview/prod hosts).
+  const hdrs = await headers();
+  const host = hdrs.get("x-forwarded-host") ?? hdrs.get("host");
+  const proto = hdrs.get("x-forwarded-proto") ?? "https";
+  const origin = host ? `${proto}://${host}` : "";
+
   const supabase = await createServerSupabase();
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -89,6 +97,9 @@ export async function signUp(
       // Saved so the org can still be bootstrapped on first login if the user
       // has to confirm their email before a session exists.
       data: { full_name: fullName, company_name: companyName },
+      // After the user clicks the email link, land them on the onboarding flow
+      // (via the /auth/confirm route handler, which verifies the token first).
+      emailRedirectTo: origin ? `${origin}/auth/confirm` : undefined,
     },
   });
 
@@ -108,14 +119,16 @@ export async function signUp(
   }
 
   if (!data.session) {
-    // Email confirmation is on: the org is created on first authenticated load.
+    // Email confirmation is on: the user finishes via the emailed link, which
+    // lands on /auth/confirm → /onboarding once verified.
     return {
       notice:
-        "Account created. Check your email for a confirmation link, then log in.",
+        "Account created. Check your email for a confirmation link to finish setting up your workspace.",
     };
   }
 
-  redirect("/pipeline");
+  // Instant login (email confirmation off): go straight to onboarding.
+  redirect("/onboarding");
 }
 
 /** Email + password sign-in. Redirects to the pipeline on success. */
