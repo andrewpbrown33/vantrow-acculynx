@@ -1,8 +1,12 @@
-# Vantrow Subsidiary #1 — Roofing Platform (working title)
+# Eaverow — a Vantrow company
 
-Monorepo for Vantrow's first white-label vertical-SaaS subsidiary: a modern, AI-native
-competitor to AccuLynx for roofing contractors, connected to personalized client
+Monorepo for **Eaverow**, Vantrow's first white-label vertical-SaaS subsidiary: a modern,
+AI-native competitor to AccuLynx for roofing contractors, connected to personalized client
 dashboards built through Vantrow.
+
+> **Name status:** "Eaverow" is chosen (Gate 1, 2026-07-16) pending same-day domain
+> registration and professional trademark clearance — see `docs/brand/naming-decision-memo-round2.md`
+> and `docs/runbooks/05-legal-counsel-checklist.md`. Nothing here is legal clearance.
 
 > **This repository is private and must stay private.** It contains internal competitive
 > research prepared under `docs/legal/clean-room-protocol.md`.
@@ -38,13 +42,13 @@ In production it requires `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` — see
 ## Status
 
 - [x] Phase 0 — Foundations
-- [ ] Phase 1A — AccuLynx teardown (docs 00–12)
-- [ ] Phase 1B — Naming sprint
-- [ ] Phase 1C — Site scaffold (brand-agnostic)
-- [ ] Phase 1D — Vantrow Connect contract v0
-- [ ] Gate 1 — Name selected, domain registered
-- [ ] Phase 2 — Brand applied + marketing copy
-- [ ] Phase 3 — Runbooks, CI, launch prep
+- [~] Phase 1A — AccuLynx teardown (docs 00–12) — feature inventory, overview, UI, API landed; data model + matrix + synthesis finishing
+- [x] Phase 1B — Naming sprint → **Eaverow** chosen
+- [x] Phase 1C — Site scaffold (brand-agnostic)
+- [x] Phase 1D — Vantrow Connect contract v0
+- [x] Gate 1 — Name selected (Eaverow); domain registration pending (Andrew)
+- [ ] Phase 2 — Brand applied + marketing copy (brand applied; copy pending teardown)
+- [x] Phase 3 — Runbooks + CI (PR pending base branch)
 - [ ] Gate 2 — Launch (domain, Vercel, Supabase live)
 - [ ] Phase 4 (deferred) — vantrow-web AEO page port, LinkedIn
 - [ ] Phase 5 (deferred) — Product platform build (`apps/platform/`)

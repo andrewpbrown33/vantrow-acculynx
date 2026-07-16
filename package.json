@@ -1,0 +1,12 @@
+{
+  "name": "vantrow-subsidiary-one",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "pnpm --filter site dev",
+    "build": "pnpm --filter site build",
+    "start": "pnpm --filter site start",
+    "lint": "pnpm --filter site lint",
+    "typecheck": "pnpm --filter site exec tsc --noEmit"
+  }
+}
