@@ -16,7 +16,8 @@ export default async function NewEstimatePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const job = await getStore().getJob(id);
+  const store = await getStore();
+  const job = await store.getJob(id);
   if (!job) notFound();
 
   return (

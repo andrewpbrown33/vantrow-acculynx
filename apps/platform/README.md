@@ -46,30 +46,51 @@ pnpm lint:platform
 pnpm typecheck:platform
 ```
 
-## Data layer: dev file store vs. Supabase (prod)
+## Two modes: dev file store vs. Supabase (prod)
 
-- **Dev / verification (default):** a **file-backed store** persists the entire
-  dataset as JSON at `<repoRoot>/.data/platform.json` (git-ignored). It is the
-  single source of truth for the app and follows the same adapter pattern as
-  the marketing site's `waitlist.ts`. On first run — if the data file is absent
-  — it **auto-seeds** the demo org (see below).
-- **Prod (follow-up):** `supabase/migrations/0002_platform.sql` is the
-  production schema — multi-tenant (`org_id` on every table), enums/checks,
-  indexes, and RLS enabled with org-scoping policy stubs. A `SupabaseStore`
-  implementing the same `PlatformStore` interface lands once a Supabase project
-  exists (see the `TODO(supabase)` in `src/lib/store.ts`).
+The app runs in one of two modes, chosen automatically at runtime by whether the
+Supabase environment variables are present (mirroring the marketing site's
+env-gated `waitlist.ts` adapter). No code changes are needed to switch.
 
-To reset dev data, delete `.data/platform.json` and reload — it reseeds.
+### Dev / verification (default — zero setup)
 
-## Auth / demo org
+- A **file-backed store** persists the entire dataset as JSON at
+  `<repoRoot>/.data/platform.json` (git-ignored) and is the single source of
+  truth. On first run — if the data file is absent — it **auto-seeds** a demo
+  org, **"Summit Ridge Exteriors"**, with **no login** (`src/lib/session.ts`
+  returns the demo org + its owner). The middleware is a **pass-through** (no
+  auth). To reset, delete `.data/platform.json` and reload — it reseeds.
+- The seed spreads jobs across every stage so the whole loop is demoable
+  immediately: one `lead`, one `estimating` (draft 3-tier estimate), one
+  `proposal_sent` (sent, with a live sign token), one `won` (signed), and one
+  `paid` (invoice + payment).
 
-v1 runs a **single seeded demo org, "Summit Ridge Exteriors", with no login**
-(`src/lib/session.ts` returns the demo org + its owner). The `/sign/[token]`
-route is deliberately public and tokenized. Real multi-user auth (Supabase
-Auth + memberships) is a follow-up — see the `TODO(supabase-auth)` in
-`session.ts` and the RLS notes in the migration.
+### Prod (Supabase — real auth + RLS multi-tenancy)
 
-The seed spreads jobs across every stage so the whole loop is demoable
-immediately: one `lead`, one `estimating` (draft 3-tier estimate), one
-`proposal_sent` (sent, with a live sign token), one `won` (signed), and one
-`paid` (invoice + payment).
+- When the three env vars below are set, the app uses a **`SupabaseStore`** (in
+  `src/lib/store.ts`) over the user-context client, so every query is
+  **org-scoped by Postgres Row Level Security**. Auth is **email + password**
+  with **self-serve signup**: each signup creates its own org, and one company
+  can never see another's data.
+- Schema: `supabase/migrations/0002_platform.sql` (tables/enums/indexes, RLS
+  enabled) then `supabase/migrations/0003_platform_auth_rls.sql` (the
+  `memberships` table + real org-scoped RLS policies). Apply **0002 first, then
+  0003**.
+- The `/sign/[token]` route stays deliberately **public and tokenized**: it and
+  the signup→org bootstrap use the service-role client (which bypasses RLS) and
+  match strictly by token / user id.
+
+### Environment variables
+
+Set these in `apps/platform/.env.local` (see `.env.local.example`) for local
+prod-mode testing, and in the platform's Vercel project for deploys. Supabase
+mode turns on only when the **URL + anon key** are both present.
+
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public anon key (browser-safe) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Secret service-role key — server-only; bypasses RLS for the public e-sign path + signup bootstrap |
+
+**Full setup + tenant-isolation test:** see the runbook
+[`docs/runbooks/07-platform-supabase-backend.md`](../../docs/runbooks/07-platform-supabase-backend.md).

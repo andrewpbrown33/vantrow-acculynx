@@ -26,7 +26,7 @@ export default async function EstimatePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const store = getStore();
+  const store = await getStore();
   const estimate = await store.getEstimate(id);
   if (!estimate) notFound();
 

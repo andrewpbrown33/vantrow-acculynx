@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { brand, brandCssVars } from "@vantrow/brand";
-import { PlatformNav } from "@/components/platform-nav";
+import { PlatformNav, type NavAccount } from "@/components/platform-nav";
+import { getSessionOrNull } from "@/lib/session";
+import { isSupabaseConfigured } from "@/lib/supabase/server";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,11 +14,19 @@ export const metadata: Metadata = {
   description: `Operations platform for ${brand.name} — leads, estimates, e-sign, invoices, and payments in one job pipeline.`,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabaseMode = isSupabaseConfigured();
+  // In Supabase mode, resolve who's signed in (null on public/auth pages) so the
+  // nav can show their name/org + a sign-out. In demo mode the nav is unchanged.
+  const session = supabaseMode ? await getSessionOrNull() : null;
+  const account: NavAccount | null = session
+    ? { name: session.user.name, orgName: session.org.name }
+    : null;
+
   return (
     <html lang="en">
       <head>
@@ -35,7 +45,7 @@ export default function RootLayout({
                   {brand.endorsement}
                 </span>
               </div>
-              <PlatformNav />
+              <PlatformNav supabaseMode={supabaseMode} account={account} />
             </div>
           </header>
           <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6">

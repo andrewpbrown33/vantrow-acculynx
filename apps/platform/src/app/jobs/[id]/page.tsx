@@ -23,7 +23,8 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const job = await getStore().getJob(id);
+  const store = await getStore();
+  const job = await store.getJob(id);
   return { title: job ? job.title : "Job" };
 }
 
@@ -41,7 +42,7 @@ export default async function JobPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const store = getStore();
+  const store = await getStore();
   const bundle = await store.getJobBundle(id);
   if (!bundle) notFound();
 
