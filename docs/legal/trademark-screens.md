@@ -385,4 +385,154 @@
 
 ---
 
+---
+
+## Round 2 (domain-first, roofing-native) — 2026-07-16
+
+**Screen date: 2026-07-16.** **Scope:** a second-round, **domain-first** pass. A large pool of roofing/exteriors-native names was generated, filtered to those with an available `.com`, and only the survivors (8 candidates) were deep-screened. **Companion memo:** `docs/brand/naming-decision-memo-round2.md` (supersedes Round 1 for domain-available options; Round 1 evidence above is retained for history).
+
+> Same method and limitations as Round 1 apply: `.com` via Verisign RDAP + Google DNS-over-HTTPS; `.io` via Identity Digital / rdap.org RDAP cross-checked against DNS (rdap.org / rdap.nic.io intermittently returned HTTP 000 through the agent proxy — treated as transport failures, not signal, and superseded by DNS and/or authoritative registry RDAP where reachable). **USPTO tmsearch.uspto.gov is a JS-only SPA that cannot be fetched (empty shell / API 405), and mirrors (uspto.report) returned 403 — so every trademark finding below is web-search indexing only, NOT a cleared register search.** Formal clearance per `docs/runbooks/05-legal-counsel-checklist.md` required before adoption.
+
+### R2-1. Eaverow — LOW
+
+**Domain checks**
+- eaverow.com → rdap.verisign.com/com/v1/domain/eaverow.com HTTP 404 = AVAILABLE (re-verified 2026-07-16)
+- eaverow.com → dns.google NS Status:3 (NXDOMAIN) + A Status:3 (NXDOMAIN) = corroborates available, no live host/parking
+- eaverow.io → rdap.identitydigital.services/rdap/domain/eaverow.io HTTP 404 = AVAILABLE (rdap.org returned 000/connection-fail; re-checked against authoritative .io registry)
+- eaverow.io → dns.google NS Status:3 (NXDOMAIN) + A Status:3 (NXDOMAIN) = corroborates available
+
+**Collision findings (WebSearch)**
+- No exact "Eaverow" in general, software, roofing, construction, or SaaS/app queries. **No company/product named Eaverow in roofing, exteriors, construction, or software/SaaS.**
+- Near-namespace only in UNRELATED industries: Eavor (eavor.com) = well-funded geothermal clean-energy firm, phonetically adjacent (EE-vor vs EE-ver-oh), different string/class; Eaver (eaverglobal.com) = thin placeholder, industry undetermined; plus minor unrelated "Eaver" uses (YouTuber, English wrestler "Pastor William Eaver"). Everway/Ever.co/Ewave/DBeaver = distinct, non-confusing.
+
+**Trademark screen — method, findings, limitations**
+- WebSearch "Eaverow trademark USPTO" → only generic USPTO portal pages, no "Eaverow" mark; tmsearch JS-rendered, not fetchable = method limitation, counsel clearance still required.
+- Positive: "Eaverow" is coined/suggestive at most (evokes "eave(s)"), favors registrability and mark strength; not merely descriptive. Roofing SaaS files Nice classes 9 + 42 (same as AccuLynx) — same-class scrutiny applies. Advisable to check "Eavor" (energy) and "Eaver" as unrelated-class phonetic citations.
+- AccuLynx similarity: NONE (EE-ver-oh vs AK-yoo-links; no shared consonant skeleton, length, or meaning).
+
+### R2-2. Gablora — LOW
+
+**Domain checks**
+- gablora.com → rdap.verisign.com/com/v1/domain/gablora.com HTTP 404 = AVAILABLE (re-verified 2026-07-16)
+- gablora.com → dns.google NS Status:3 (NXDOMAIN, com. SOA authority) + A Status:3 (NXDOMAIN) = unregistered
+- gablora.io → rdap.identitydigital.services (authoritative .io) HTTP 404 = AVAILABLE
+- gablora.io → dns.google NS Status:3 (NXDOMAIN, io. SOA authority) = unregistered; rdap.org / rdap.nic.io returned 000 (endpoint failure), superseded by Identity Digital RDAP + DNS
+
+**Collision findings (WebSearch)**
+- No direct collisions — no company/product/app/SaaS named "Gablora" in general, software/SaaS, or roofing/exteriors/contractor searches. Results = unrelated noise (given name "Gabriella," Polish "gablota" = display case, Gabriella-brand socks code, unrelated "Gabify" healthcare SaaS).
+- Contextual note only: name embeds "gable" (generic roofing-architecture term); roofing space has a crowded field of descriptively gable-named firms (Green Gable Roofing & Exteriors, Gaby Roofing, Wildwood gable-roof services) — generic word usage, not the coined mark, so no naming collision.
+
+**Trademark screen — method, findings, limitations**
+- WebSearch "Gablora trademark USPTO" → only generic USPTO/TSDR/tmsearch landing pages, no mark. tmsearch JS-heavy SPA not fetchable; uspto.report mirror HTTP 403. Live tmsearch query in 9/42 (plus "gable-" root sweep) still required.
+- Distinctiveness caveat: embeds "gable" (generic roofing term) → suggestive/descriptive borderline in-class, coexists with common-law "gable" users; "Gablora" as a whole is a distinctive invented word.
+- AccuLynx similarity: LOW/negligible (/ˈækjəlɪŋks/ vs /ɡæbˈlɔːrə/; no shared phonemes, A vs G start, -ynx vs -ora ending).
+
+### R2-3. Battenly — MEDIUM
+
+**Domain checks**
+- battenly.com → rdap.verisign.com/com/v1/domain/battenly.com HTTP 404 = AVAILABLE (re-verified 2026-07-16)
+- battenly.com → dns.google NS Status:3 (NXDOMAIN, com. SOA) + A Status:3 (NXDOMAIN) = unregistered
+- battenly.io → dns.google NS Status:3 (NXDOMAIN, io. SOA) + A Status:3 (NXDOMAIN) = appears available on DNS evidence
+- battenly.io → RDAP: rdap.org and rdap.nic.io both HTTP 000 (unreachable through proxy) — RDAP could NOT corroborate; .io availability rests on DNS NXDOMAIN only
+
+**Collision findings (WebSearch)**
+- No company/product/app/SaaS named "Battenly" across four queries — only genealogy/surname records (rare Scottish surname, 1881 Lanarkshire), name-meaning pages, and a differently-spelled script FONT "Batteny" (no second n, no l). Non-matching near-strings: "Battly Launcher" (Minecraft) and "Battery Ventures" (VC).
+- Namespace note: "batten" is an industry-descriptive roofing/siding term; the Batten-rooted roofing field is moderately crowded with PHYSICAL contractors/suppliers — E K Batten Roofing, Battens Plus, Chris Battaini Roofing, Johns Manville "Membrane Battens," Westlake Royal batten systems. All physical goods/services, NOT software — no direct product collision, but they crowd the near-namespace.
+
+**Trademark screen — method, findings, limitations**
+- WebSearch "Battenly trademark USPTO" → only USPTO portal pages, no mark. tmsearch JS-heavy SPA, not directly fetchable = web-visibility screen only. Formal tmsearch query required.
+- Descriptiveness flag: "batten" is a recognized roofing/siding component term → "Battenly" reads suggestive-to-descriptive in-industry, may weaken registrability in 9/42 and invite coexistence with the Batten-named field. Coined "-ly" suffix adds distinctiveness; concern moderate, not disqualifying.
+- AccuLynx similarity: NONE (BAT-en-lee vs AK-yoo-links; no shared phonemes/prefix/suffix/visual overlap/meaning).
+
+### R2-4. Hewdeck — MEDIUM
+
+**Domain checks**
+- hewdeck.com → rdap.verisign.com/com/v1/domain/hewdeck.com HTTP 404 = AVAILABLE
+- hewdeck.com → dns.google NS Status:3 (NXDOMAIN, com. SOA authority) = unregistered/available
+- hewdeck.io → rdap.org HTTP 000 connection failure = METHOD LIMITATION, RDAP inconclusive
+- hewdeck.io → dns.google NS Status:3 (NXDOMAIN, io. SOA authority) = unregistered/available on DNS evidence (registered .io domains carry registry NS delegation)
+
+**Collision findings (WebSearch)**
+- No direct company/product collision for "Hewdeck" in any industry — four searches (bare, +software, +roofing, +construction) returned zero businesses on the name; only literal hit is surname "S. Hewdeck" in a 2006 track-meet result. Roofing/construction searches returned only the generic term "roof decking."
+- SOFTWARE near-namespace crowding: Hookdeck (established webhook-infra SaaS, hookdeck.com; G2/Capterra/SaaSworthy) = aural/visual near-neighbor (Hew-deck vs Hook-deck, both software brands ending "-deck"); Haiku Deck (presentation SaaS); legacy "HEW" acronyms (Renesas High-performance Embedded Workshop IDE; CMS HIPAA Eligibility Wrapper). None is a roofing/exteriors/construction product = no true in-industry collision.
+
+**Trademark screen — method, findings, limitations**
+- WebSearch "Hewdeck trademark USPTO" → only generic USPTO/tmsearch landing pages. WebFetch uspto.report/company/search?q=hewdeck → HTTP 403 Forbidden. tmsearch JS-heavy SPA not fetchable → TM screen limited to WebSearch (preliminary knockout only).
+- Coined Hew+deck compound likely registrable (suggestive/fanciful), though "deck" is somewhat descriptive of roof decking, mildly weakening distinctiveness in the roofing field. Both file in 9/42.
+- AccuLynx similarity: NONE (Hew-deck, 2 syllables, H-/-deck vs Ac-cu-lynx, 3 syllables, A-/-lynx; different length, letter set, meaning).
+
+### R2-5. Rafterow — MEDIUM
+
+**Domain checks**
+- rafterow.com → rdap.verisign.com/com/v1/domain/rafterow.com HTTP 404 = AVAILABLE (re-verified 2026-07-16)
+- rafterow.com → dns.google NS Status:3 (NXDOMAIN, com. SOA) + A Status:3 (NXDOMAIN) = not registered, corroborates available
+- rafterow.io → rdap.org HTTP 000 (transport/proxy failure, not authoritative)
+- rafterow.io → dns.google NS Status:3 (NXDOMAIN, io. SOA) = appears available on DNS evidence
+
+**Collision findings (WebSearch)**
+- No exact-match company/product/SaaS named "Rafterow." Only exact-string web hit is Polish Wikipedia "Chata pelna Rafterow" (TV series *Packed to the Rafters*, grammatical inflection of "Rafters") — not a business.
+- Crowded/generic near-namespace in target industry: "Rafter" is a standard roof-framing term — "Rapid Rafter" (framing/roofing square tool, rapidrafter.com), a "Rafter estimator for roofing" Android app, and multiple unrelated "Rafter [letter]" ranch/rodeo businesses (Rafter K Rodeo, Rafter W Ranches). None use the compound "Rafterow," but "Rafter" root is descriptive/suggestive and heavily used in roofing/construction.
+
+**Trademark screen — method, findings, limitations**
+- WebSearch "Rafterow trademark USPTO" and "'Rafterow' company OR SaaS OR app OR trademark" → no USPTO record; only USPTO portal links. tmsearch JS-heavy, not fetchable = method limitation, formal knockout search still required. No live in-class 9/42 mark evident.
+- Distinctiveness caveat: "Rafter" is a descriptive roof-framing term → "Rafterow" may draw suggestive/descriptive scrutiny and face a crowded field of "Rafter"-formative marks.
+- AccuLynx similarity: LOW (RAF-ter-oh vs AK-yoo-links; no shared root, syllable structure, phonetics, or meaning).
+
+### R2-6. Trowforge — MEDIUM
+
+**Domain checks**
+- trowforge.com → rdap.verisign.com/com/v1/domain/trowforge.com HTTP 404 = AVAILABLE
+- trowforge.com → dns.google NS Status:3 (NXDOMAIN) + A Status:3 (NXDOMAIN) = no live host, corroborates available
+- trowforge.io → rdap.org 000 (proxy failure, no signal); re-verified rdap.identitydigital.services/rdap/domain/trowforge.io HTTP 404 = AVAILABLE
+- trowforge.io → dns.google NS Status:3 (NXDOMAIN) = corroborates .io available
+
+**Collision findings (WebSearch)**
+- Minor unrelated-industry collision + crowded in-industry "Forge" namespace. (1) "Trow Forge Technical Sales, LLC" / "Trow Forge Technical Services" (Los Angeles) — supplies hardware and ink to the PACKAGING industry; identical string once the space is removed, different field, rebranding to "TF Technical" (tftechnical.com). (2) Irrelevant: fantasy novel "Trow Forge (Goblin Alley)" (Ryan M. Williams, Amazon), Etsy blacksmith "TRForge." (3) No SaaS/roofing/construction company named "Trowforge."
+- "-forge" heavily diluted in the exact target vertical: Forge Construction Group, Forge Roofing Services, Forge & Nail Roofing & Construction, Forge Building Company, Forge Construction.
+
+**Trademark screen — method, findings, limitations**
+- WebSearch "Trowforge trademark USPTO" → no "Trowforge" federal mark; only an unrelated "FORGE" application (Forge Life LLC, filed 2025-03-06, electronic/biometric locks, Class 9 — not close, different goods). tmsearch JS-rendered, not fetchable = WebSearch-only screen, not a definitive clearance.
+- Caveat: "Trow Forge Technical Sales/Services, LLC" is a prior common-law user of the identical two-word string (unrelated packaging field). "Forge" is a common, weak/crowded TM element generally and in roofing/construction → narrows protectable scope of a "-forge" mark.
+- AccuLynx similarity: NONE (TROW-forj vs AK-yoo-links; no shared phonetics/spelling/meaning).
+
+### R2-7. Cladwright — ELEVATED
+
+**Domain checks**
+- cladwright.com → rdap.verisign.com/com/v1/domain/cladwright.com HTTP 404 = AVAILABLE (re-verified 2026-07-16)
+- cladwright.com → dns.google NS Status:3 (NXDOMAIN, com. SOA authority, no NS delegation) = corroborates available
+- cladwright.io → rdap.org/domain/cladwright.io HTTP 404 = AVAILABLE
+- cladwright.io → dns.google NS Status:3 (NXDOMAIN, io. SOA authority) = corroborates available
+
+**Collision findings (WebSearch + Companies House)**
+- **EXACT-NAME COLLISION IN CONSTRUCTION:** CLADWRIGHT LTD — ACTIVE UK company, Companies House #15028052, incorporated 25 Jul 2023, registered office 2 Buttler Way, Sleaford NG34 7PA, SIC 41201 "Construction of commercial buildings." Confirmed via WebFetch of find-and-update.company-information.service.gov.uk/company/15028052: Status ACTIVE. Exact-name, live, same broad industry. Small/young firm, no discoverable web presence, NOT a software product — but a live same-industry namesake.
+- Near-miss social: "@cladright" on X (one letter off, industry unknown).
+- Roofing vertical phonetic near-miss: C.L. Wright Roofing Inc. (Midlothian/Richmond VA, since 1986) — "C L Wright" phonetically close, in exact target vertical.
+- Crowded namespace: Cladding Corp, Cladify, Cladding Construction Ltd, Cladding Systems → clad+wright is descriptive/suggestive, weakly distinctive.
+- Software check: no U.S. software/SaaS product named Cladwright.
+
+**Trademark screen — method, findings, limitations**
+- WebSearch "Cladwright trademark USPTO" → only generic USPTO landing/search pages, NO "Cladwright" mark. tmsearch/TESS/TSDR JS/session-based, not fetchable = keyword screen, not cleared. Formal US + UK (UKIPO) clearance required, esp. classes 9/42 and construction/exteriors classes.
+- Because "Cladwright" is descriptive/suggestive of the cladding trade AND an active same-name construction company exists, distinctiveness/registrability likely weaker and more contested than an invented mark.
+- AccuLynx similarity: LOW (Clad+wright vs Accu+Lynx; no shared root/phonemes; aural/visual/conceptual overlap low).
+
+### R2-8. Forgelay — ELEVATED
+
+**Domain checks**
+- forgelay.com → rdap.verisign.com/com/v1/domain/forgelay.com HTTP 404 = AVAILABLE (re-verified 2026-07-16)
+- forgelay.com → dns.google NS Status:3 (NXDOMAIN, no NS records) = unregistered/unresolved, corroborates available
+- forgelay.io → rdap.org/domain/forgelay.io HTTP 404 = AVAILABLE
+- forgelay.io → dns.google NS Status:3 (NXDOMAIN, no NS records) = corroborates available
+
+**Collision findings (WebSearch + WebFetch)**
+- No exact "Forgelay" company/product/mark, but meaningful near-namespace collisions. **STRONGEST — "Forgely" (Forge-lee):** a LIVE, actively marketed SaaS in the field-service/home-services vertical — people/talent-management + LMS software (formerly "BackOffice," now under Coalmarch), explicitly built for lawn care, pest control, plumbing, HVAC contractors (the same home-services trades ecosystem as roofing/exteriors). LinkedIn, Capterra (vs Workday HCM, iCIMS), eLearning Industry listing, "Forgely Hire" product. Differs from "Forgelay" by one inserted letter, near-homophone. WebFetch of eLearning Industry Forgely page confirmed: real SaaS, people/team management + LMS, desktop + cloud, xAPI. Same classes 9/42, overlapping trade channels, near-identical mark = genuine likelihood-of-confusion.
+- "ForgeLayer" (forgelayer.io) — enterprise blockchain wallet-infra API; "Forgely3D" (forgely3d.com) — 3D-printing filament (same "Forgely" brand family).
+- Heavily crowded "Forge-" root in BOTH construction/roofing (Forge & Nail Roofing & Construction, Forge Construction KC/LLC, Forged Construction, Forgen) AND software (Atlassian Forge, Laravel Forge, Autodesk Forge, Forgejo, Forge Software, SaaS Forge).
+
+**Trademark screen — method, findings, limitations**
+- USPTO tmsearch POST API → HTTP 405; GET search URL → HTTP 200 but empty JS shell (no parseable records). WebSearch "Forgelay trademark USPTO" → only generic USPTO pages, no "Forgelay" mark. No federal registration for exact "Forgelay" found within these limits.
+- **NOT a clean bill:** near-identical senior brand "Forgely" is a live commercial software mark in the same field-service SaaS vertical, likely holds common-law and/or registered rights in-class; full attorney clearance in 9/42 against "Forgely"/"Forge-" formatives warranted. Absence of a fetched record = tooling limitation, not a clear namespace.
+- AccuLynx similarity: NONE (Forge-lay vs Ack-yoo-links; no shared phonemes/letters/meaning). The trademark risk comes from "Forgely," not AccuLynx.
+
+---
+
 *End of evidence record. All verdicts are snapshots as of the screen date and decay; re-verify domain availability immediately before purchase, and route all trademark questions through counsel per `docs/runbooks/05-legal-counsel-checklist.md`.*
