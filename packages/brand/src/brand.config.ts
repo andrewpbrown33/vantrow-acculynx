@@ -31,22 +31,23 @@ export interface BrandConfig {
 }
 
 export const brand: BrandConfig = {
-  name: "__BRAND__",
-  legalName: "__BRAND__, Inc.",
-  tagline: "Roofing business software that runs itself",
+  name: "Eaverow",
+  legalName: "Eaverow, Inc.",
+  tagline: "Roofing software that runs itself",
   description:
-    "An AI-native platform that runs the back office of your roofing business and keeps every homeowner informed with a live client dashboard.",
-  domain: "example.com",
-  supportEmail: "hello@example.com",
+    "Eaverow is the AI-native platform that runs the back office of your roofing business and keeps every homeowner informed with a live client dashboard.",
+  domain: "eaverow.com",
+  supportEmail: "hello@eaverow.com",
   endorsement: "a Vantrow company",
   colors: {
-    // Neutral, professional slate/steel palette — intentional pre-branding.
-    primary: "#3e5c76",
-    primaryDark: "#1d2d44",
-    accent: "#748cab",
+    // Eaverow palette: deep slate-blue (shelter/trust) with a warm copper
+    // accent (roofing metal, craft). Tuned for AA contrast on the light bg.
+    primary: "#1b4965",
+    primaryDark: "#0f2e42",
+    accent: "#c96a24",
     background: "#f7f9fb",
-    foreground: "#16232f",
-    muted: "#5b6b7b",
+    foreground: "#0d1b26",
+    muted: "#566976",
   },
 };
 
