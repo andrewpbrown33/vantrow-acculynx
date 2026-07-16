@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { genId, genToken } from "./ids";
 import { estimateTotals, formatUsd } from "./money";
 import { getSession } from "./session";
-import { getStore } from "./store";
+import { getServiceStore, getStore } from "./store";
 import type {
   EstimateOption,
   EstimateTier,
@@ -101,7 +101,7 @@ function defaultTierName(tier: EstimateTier): string {
 /** Create a Contact + Job(lead), log activity, and open the new job. */
 export async function createLead(formData: FormData): Promise<void> {
   const { org } = await getSession();
-  const store = getStore();
+  const store = await getStore();
 
   const name = str(formData.get("contactName"));
   if (!name) throw new Error("A contact name is required to create a lead.");
@@ -141,7 +141,7 @@ export async function createEstimate(
   data: EstimateInput,
 ): Promise<void> {
   const { org } = await getSession();
-  const store = getStore();
+  const store = await getStore();
 
   const job = await store.getJob(jobId);
   if (!job || job.orgId !== org.id) throw new Error("Job not found.");
@@ -183,7 +183,7 @@ export async function sendEstimate(
   estimateId: string,
 ): Promise<{ token: string; path: string }> {
   const { org } = await getSession();
-  const store = getStore();
+  const store = await getStore();
 
   const estimate = await store.getEstimate(estimateId);
   if (!estimate || estimate.orgId !== org.id) {
@@ -232,7 +232,9 @@ export async function signEstimate(
   token: string,
   input: SignInput,
 ): Promise<SignResult> {
-  const store = getStore();
+  // PUBLIC path: no authenticated user, so use the service-role store and look
+  // the estimate up strictly by its unguessable token (RLS is bypassed here).
+  const store = getServiceStore();
 
   const estimate = await store.getEstimateByToken(token);
   if (!estimate) {
@@ -288,7 +290,7 @@ export async function signEstimate(
 /** Create an open Invoice from the job's signed estimate; advance to invoiced. */
 export async function createInvoice(jobId: string): Promise<void> {
   const { org } = await getSession();
-  const store = getStore();
+  const store = await getStore();
 
   const job = await store.getJob(jobId);
   if (!job || job.orgId !== org.id) throw new Error("Job not found.");
@@ -345,7 +347,7 @@ export async function recordPayment(
   input: PaymentInput,
 ): Promise<{ ok: true; paid: boolean }> {
   const { org } = await getSession();
-  const store = getStore();
+  const store = await getStore();
 
   const invoice = await store.getInvoice(invoiceId);
   if (!invoice || invoice.orgId !== org.id) throw new Error("Invoice not found.");

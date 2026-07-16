@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { brand } from "@vantrow/brand";
 import { SignForm } from "@/components/sign-form";
-import { getStore } from "@/lib/store";
+import { getServiceStore } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +24,9 @@ export default async function SignPage({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
-  const store = getStore();
+  // PUBLIC, unauthenticated read: use the service-role store and match strictly
+  // by token (the RLS user client would see nothing for an anonymous visitor).
+  const store = getServiceStore();
   const estimate = await store.getEstimateByToken(token);
 
   if (!estimate) {

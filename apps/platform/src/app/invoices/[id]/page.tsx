@@ -21,7 +21,8 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const invoice = await getStore().getInvoice(id);
+  const store = await getStore();
+  const invoice = await store.getInvoice(id);
   return { title: invoice ? invoice.number : "Invoice" };
 }
 
@@ -39,7 +40,7 @@ export default async function InvoicePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const store = getStore();
+  const store = await getStore();
   const invoice = await store.getInvoice(id);
   if (!invoice) notFound();
 

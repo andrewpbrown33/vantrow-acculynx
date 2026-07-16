@@ -21,7 +21,7 @@ interface Card {
 
 export default async function PipelinePage() {
   const { org } = await getSession();
-  const store = getStore();
+  const store = await getStore();
   const byStage = await store.jobsByStage(org.id);
 
   async function toCards(jobs: Job[]): Promise<Card[]> {
