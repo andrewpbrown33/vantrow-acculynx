@@ -104,6 +104,12 @@ export async function signUp(
   });
 
   if (error) {
+    // Full detail to the server logs (Vercel → your platform project → Logs).
+    console.error("[signup] supabase.auth.signUp failed:", {
+      code: error.code,
+      status: error.status,
+      message: error.message,
+    });
     const msg = error.message.toLowerCase();
     if (error.code === "user_already_exists" || msg.includes("already registered")) {
       return { error: "An account with this email already exists. Try logging in." };
@@ -111,11 +117,39 @@ export async function signUp(
     if (error.code === "weak_password" || msg.includes("password")) {
       return { error: "Please choose a stronger password (at least 6 characters)." };
     }
-    return { error: "Could not create your account. Please try again." };
+    if (msg.includes("rate limit") || msg.includes("too many") || error.status === 429) {
+      return {
+        error:
+          "Too many attempts in a short window (Supabase's email/rate limit). Wait a few minutes and try again — or turn off Authentication → Email → “Confirm email” in Supabase to remove the email step.",
+      };
+    }
+    if (msg.includes("sending") || (msg.includes("email") && msg.includes("confirm"))) {
+      return {
+        error:
+          "Supabase couldn’t send the confirmation email. In Supabase → Authentication → Providers → Email, turn off “Confirm email” (or configure an email provider), then try again.",
+      };
+    }
+    if (msg.includes("signups not allowed") || msg.includes("signup is disabled") || msg.includes("not allowed")) {
+      return {
+        error:
+          "Signups are disabled for this project. In Supabase → Authentication → Sign In / Providers, enable email signups, then try again.",
+      };
+    }
+    // Fall back to the real message so nothing is hidden while we get set up.
+    return { error: `We couldn’t create your account: ${error.message}` };
   }
 
   if (data.user) {
-    await bootstrapOrg(data.user.id, companyName, fullName);
+    try {
+      await bootstrapOrg(data.user.id, companyName, fullName);
+    } catch (bootstrapErr) {
+      const detail =
+        bootstrapErr instanceof Error ? bootstrapErr.message : String(bootstrapErr);
+      console.error("[signup] org bootstrap failed:", detail);
+      return {
+        error: `Your account was created, but setting up your workspace failed: ${detail}. This usually means the 0003 migration wasn’t applied or the service-role key is missing. Fix that, then log in — your workspace will finish setting up automatically.`,
+      };
+    }
   }
 
   if (!data.session) {
