@@ -13,8 +13,9 @@ Dated record of program decisions. Newest first.
 | 2026-07-15 | Initial site depth | Marketing site + single early-access form (waitlist + demo request merged) | Andrew |
 | 2026-07-15 | Dashboard integration | Contract-first: "Vantrow Connect" spec (REST + webhooks + fixtures) defined before either implementation exists | Andrew + plan |
 | 2026-07-15 | Deferred items | vantrow-web AEO page port; LinkedIn page + insights; transactional email; product build | Andrew |
-| 2026-07-15 | Brand architecture (recommendation, pending Gate 1) | Endorsed brand: standalone name + "a Vantrow company" endorsement, own domain | pending |
-| _pending_ | **Gate 1: brand name** | | Andrew |
+| 2026-07-16 | **Brand architecture (confirmed)** | Endorsed brand: standalone name + logo + domain with "a Vantrow company" endorsement line | Andrew |
+| 2026-07-16 | Naming round 2 | Round 1 field too crowded (only Kestrow had a clean available .com). Running a domain-first round focused on roofing/exteriors-native names; only names with an available .com are surfaced | Andrew |
+| _pending_ | **Gate 1: brand name** | Awaiting round-2 memo (`docs/brand/naming-decision-memo-round2.md`) | Andrew |
 
 ## Gate 1 record (to be completed)
 
