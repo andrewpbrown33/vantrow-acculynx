@@ -196,7 +196,42 @@ export async function signIn(
     return { error: "That email or password is incorrect." };
   }
 
-  redirect("/pipeline");
+  // Brand-new workspaces (no contacts, no jobs yet) land on onboarding so the
+  // migration flow isn't missed when the confirm-link path was skipped or hit
+  // a snag; everyone else goes to the pipeline. Best-effort: any failure in
+  // this check falls back to the pipeline.
+  let destination = "/pipeline";
+  try {
+    const { data: membership } = await supabase
+      .from("memberships")
+      .select("org_id")
+      .limit(1)
+      .maybeSingle();
+    const orgId = (membership as { org_id: string } | null)?.org_id;
+    if (!orgId) {
+      // No membership yet: a brand-new account whose workspace bootstraps on
+      // first load — definitely onboarding.
+      destination = "/onboarding";
+    } else {
+      const [jobs, contacts] = await Promise.all([
+        supabase
+          .from("jobs")
+          .select("*", { count: "exact", head: true })
+          .eq("org_id", orgId),
+        supabase
+          .from("contacts")
+          .select("*", { count: "exact", head: true })
+          .eq("org_id", orgId),
+      ]);
+      if ((jobs.count ?? 0) === 0 && (contacts.count ?? 0) === 0) {
+        destination = "/onboarding";
+      }
+    }
+  } catch (e) {
+    console.error("[signin] fresh-workspace check failed:", e);
+  }
+
+  redirect(destination);
 }
 
 /** Sign out and return to the login page. */
