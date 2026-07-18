@@ -5,7 +5,7 @@ import { formatUsd } from "@/lib/money";
 import { getSession } from "@/lib/session";
 import { STAGE_META, STAGE_ORDER } from "@/lib/stages";
 import { getStore } from "@/lib/store";
-import type { Contact, Job } from "@/lib/types";
+import type { Contact, Job, JobStage } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -22,28 +22,39 @@ interface Card {
 export default async function PipelinePage() {
   const { org } = await getSession();
   const store = await getStore();
-  const byStage = await store.jobsByStage(org.id);
 
-  async function toCards(jobs: Job[]): Promise<Card[]> {
-    return Promise.all(
-      jobs.map(async (job) => {
-        const bundle = await store.getJobBundle(job.id);
-        return {
-          job,
-          contact: bundle?.contact,
-          valueCents: bundle ? jobDisplayValueCents(bundle) : null,
-        };
+  // One pass over the org's data (no per-job bundle fetch).
+  const entries = await store.listPipeline(org.id);
+  const byStage: Record<JobStage, Card[]> = {
+    lead: [],
+    estimating: [],
+    proposal_sent: [],
+    won: [],
+    invoiced: [],
+    paid: [],
+    dead: [],
+  };
+  for (const e of entries) {
+    byStage[e.job.stage].push({
+      job: e.job,
+      contact: e.contact,
+      valueCents: jobDisplayValueCents({
+        job: e.job,
+        contact: e.contact,
+        estimates: e.estimates,
+        invoices: e.invoices,
+        activities: [],
       }),
+    });
+  }
+  for (const stage of Object.keys(byStage) as JobStage[]) {
+    byStage[stage].sort((a, b) =>
+      b.job.updatedAt.localeCompare(a.job.updatedAt),
     );
   }
 
-  const columns = await Promise.all(
-    STAGE_ORDER.map(async (stage) => ({
-      stage,
-      cards: await toCards(byStage[stage]),
-    })),
-  );
-  const deadCards = await toCards(byStage.dead);
+  const columns = STAGE_ORDER.map((stage) => ({ stage, cards: byStage[stage] }));
+  const deadCards = byStage.dead;
   const totalJobs = columns.reduce((n, c) => n + c.cards.length, 0);
 
   return (
