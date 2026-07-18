@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { brand } from "@vantrow/brand";
 import { ContactImporter } from "@/components/contact-importer";
+import { IntegrationHarvester } from "@/components/integration-harvester";
 
 export const dynamic = "force-dynamic";
 
@@ -167,9 +168,24 @@ export default function OnboardingPage() {
           </div>
         </section>
 
-        {/* Section 2 — Self-serve contacts import */}
+        {/* Section 2 — Integration-partner harvesting */}
         <section className="rounded-xl border border-foreground/10 bg-white p-6">
-          <SectionHeading n={2} title="Import your contacts" />
+          <SectionHeading n={2} title="Recover data from your connected tools" />
+          <p className="mt-3 text-sm text-muted">
+            A lot of what AccuLynx won&rsquo;t hand over &mdash; job photos, texts,
+            invoices, measurements &mdash; may already live in the other tools you
+            connected to it. You own those accounts, so you can export that data
+            directly from them, no AccuLynx export required. Check the ones you
+            used:
+          </p>
+          <div className="mt-5">
+            <IntegrationHarvester />
+          </div>
+        </section>
+
+        {/* Section 3 — Self-serve contacts import */}
+        <section className="rounded-xl border border-foreground/10 bg-white p-6">
+          <SectionHeading n={3} title="Import your contacts" />
           <p className="mt-3 text-sm text-muted">
             Upload the Contacts CSV you just exported. We&rsquo;ll auto-match the
             columns, let you preview the result, and skip any duplicates you already
@@ -180,9 +196,9 @@ export default function OnboardingPage() {
           </div>
         </section>
 
-        {/* Section 3 — Concierge */}
+        {/* Section 4 — Concierge */}
         <section className="rounded-xl border border-foreground/10 bg-white p-6">
-          <SectionHeading n={3} title="Jobs, photos & everything else" />
+          <SectionHeading n={4} title="Jobs, photos & everything else" />
           <p className="mt-3 text-sm text-muted">
             Prefer we handle the full migration &mdash; jobs, photos, documents, and
             the messy long tail? Email your complete AccuLynx export (and any files
