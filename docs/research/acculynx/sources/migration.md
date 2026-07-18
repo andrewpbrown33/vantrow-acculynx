@@ -46,3 +46,28 @@ their data hostage" verbatim; DataMart launched Oct 2025; ReportsPlus add-on]; d
 model (entity catalog + Lead→…→Closed/Dead stage machine for milestone mapping).
 
 Prepared under docs/legal/clean-room-protocol.md.
+
+## Round 2 — visual export guides (accessed 2026-07-18)
+
+Purpose: find linkable guides with real AccuLynx UI screenshots/video for the onboarding
+export playbook. Verdict: STRONG — official KB articles + one live third-party screenshot
+guide. Note: the official KB host is support.acculynx.com (Zendesk); it 403s to
+datacenter/bot traffic but is a public, Google-indexed KB (verified via Wayback captures).
+
+| ID | URL | Accessed | What it shows |
+|---|---|---|---|
+| S-MIG-V01 | https://support.acculynx.com/hc/en-us/articles/203164825-Export-Contacts-and-Leads | 2026-07-18 (via Wayback 2025-03-20) | OFFICIAL, 6 UI screenshots: your name → Account Settings → Manage Leads/Contacts → Export Contacts and Leads → Contacts/Leads (+Include Prospects) → Download .CSV. Requires Company/Location Administrator. Updated 2024-01-10 |
+| S-MIG-V02 | https://support.acculynx.com/hc/en-us/articles/204954235-Export-History-and-Comments | 2026-07-18 (via Wayback) | OFFICIAL, 4 screenshots: per-job Job Menu → Settings → Export History/Comments (Message Board + Change History; PDF/Xls/Csv/etc). Manual, job-by-job — corrects our "message history doesn't export" to "no BULK export" |
+| S-MIG-V03 | https://support.acculynx.com/hc/en-us/articles/32038851975565-Reports-19-12 | 2026-07-18 (Wistia oEmbed verified: 7tez6h6fbs, 19:12, 2024-11-20) | OFFICIAL role-based KB training video covering the Reports area; sibling 16:01 version at .../articles/32080144967949 (Wistia 6kcknttg58) |
+| S-MIG-V04 | https://learn.projectmapit.com/help-center/how-do-i-download-a-spreadsheet-from-acculynx | 2026-07-18 (live) | 9 UI screenshots of the Reports export: Reports tab → Sales Report → All Data → Actions → Edit Report → Columns → Apply → Actions → Download/Export |
+| S-MIG-V05 | https://support.signpost.com/hc/en-us/articles/360046619531-How-To-Export-a-Contact-List-from-Acculynx | 2026-07-18 (via Wayback; live URL 503) | Text steps corroborating: Jobs Report, Reference Date → Lead Date, column picks via Edit Report |
+| S-MIG-V06 | https://roofingsoftwareguide.com/guides/switch-acculynx-to-jobnimbus/ + https://www.revolvecore.com/resources/blog/how-to-switch-from-acculynx | 2026-07-18 (live) | Competitor switch guides — strategy prose only, NO AccuLynx UI screenshots (negative result) |
+| S-MIG-V07 | AccuLynx official YouTube (UCvvlbOO0FsE9UplxQpUKLsg) + third-party tutorials (Lnm3ctSbPtA, bXmwFmejkWg, qFKo9oBeL0E) | 2026-07-18 | No official export walkthrough video on YouTube; third-party tutorials unchaptered — no timestampable export segment (negative result) |
+
+Applied to the product 2026-07-18: onboarding Section 1 now leads with the built-in
+contacts export (S-MIG-V01), refines the Reports path (Reference Date → Lead Date,
+Report Library, exact button labels per S-MIG-V04/V05), links out to S-MIG-V01/V03/V04
+("see it done" — links only, no embedded AccuLynx screenshots per trade-dress guardrail),
+and softens the message-history claim per S-MIG-V02.
+
+Prepared under docs/legal/clean-room-protocol.md.
