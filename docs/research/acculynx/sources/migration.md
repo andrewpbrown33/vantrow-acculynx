@@ -143,3 +143,23 @@ S=secondary, T=tertiary/SEO, L=legal primary.
 **Cross-referenced internal:** doc 05 [S-API-001 file-blind API §7.13; S-API-002 vendor-on-behalf
 suspension; §8 webhook topic list], doc 13 (gap inventory, ToS §9/§14/§15, per-job message export
 S-MIG-V02). Prepared under docs/legal/clean-room-protocol.md.
+
+## Round 4 — sanctioned escape hatches + integration-partner harvesting (2026-07-18)
+
+Deep KB pass (support.acculynx.com via Wayback CDX; partner help centers). All accessed 2026-07-18.
+
+| ID | URL | Finding |
+|---|---|---|
+| S-MIG-R4-01 | https://support.acculynx.com/hc/en-us/articles/31784849704589 (Job Communications, Fall-2024 notes, Wayback) | Full job-message history "can be exported from AccuLynx upon request" — official support-mediated comms export |
+| S-MIG-R4-02 | https://support.acculynx.com/hc/en-us/articles/203164325 (Company Documents, Wayback 2025-03-18) | Multi-select bulk Download of company template library; all roles |
+| S-MIG-R4-03 | https://support.acculynx.com/hc/en-us/articles/203164555 (Change History / Job History page, Wayback) | Job History export PDF/CSV; types incl. Email/Estimate/Order/Payment/Appointment/File uploads |
+| S-MIG-R4-04 | https://support.acculynx.com/hc/en-us/articles/115002873491 (Smart(er) Docs customer experience, Wayback 2025-04-30) | E-sign "Signing Completed" email w/ Download Document PDF to homeowner |
+| S-MIG-R4-05 | https://apidocs.acculynx.com/reference/getjobhistory | GET /jobs/{id}/history paginated — scriptable bulk change-history (AppConnections-gated) |
+| S-MIG-R4-06 | https://help.companycam.com/en/articles/9203693 + /6828429 + /7047268 | CompanyCam one-way into AccuLynx; originals stay in CC; Download All Photos zip + CSV |
+| S-MIG-R4-07 | https://support.callrail.com/hc/en-us/articles/5711458151053 | CallRail account-level export: Calls, Forms, SMS, Leads, recordings → zip |
+| S-MIG-R4-08 | AccuLynx QuickBooks KB (Wayback 2025-03-20) + https://acculynx.com/integrations/quickbooks/ | QB retains customers/jobs/invoices(line detail)/payments in contractor's own QB file |
+| S-MIG-R4-09 | https://help.hover.to/en/articles/4931253 ; https://www.eagleview.com/help-center/ ; quickmeasure.gaf.com | Measurement reports re-downloadable from contractor's own storefront accounts |
+| S-MIG-R4-10 | https://acculynx.com/appconnections/hubspot/ ; https://www.abcsupply.com/contractor-center/myabcsupply/ | HubSpot mirror exportable; supplier portals retain orders/invoices/statements |
+| S-MIG-R4-11 | https://acculynx.com/reportsplus/datamart/ | DataMart = direct Snowflake SQL (Elite add-on); job-level KPIs only — no files/comms |
+
+Prepared under docs/legal/clean-room-protocol.md.

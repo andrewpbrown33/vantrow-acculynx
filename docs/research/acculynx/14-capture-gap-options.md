@@ -326,3 +326,67 @@ where a live-account probe of §15/DataMart matters most.
 
 *Prepared under docs/legal/clean-room-protocol.md. Extends doc 13; supersedes nothing. Round 3
 sources logged in sources/migration.md.*
+
+---
+
+## Addendum (2026-07-18) — sanctioned escape hatches + integration-partner harvesting
+
+A deeper KB pass (official articles via Wayback + partner help centers) surfaced findings that
+**soften the "it's all hard" conclusion**. Two updates matter most: (A) more of AccuLynx's OWN
+sanctioned exports exist than doc 13/14 credited, and (B) — the bigger reframe — **much of the
+"gap" data already lives in the contractor's own CONNECTED third-party accounts**, which they can
+export themselves with full rights and zero AccuLynx-ToS exposure. Confidence tags per source
+(confirmed-official = an official AccuLynx/partner page/KB says it; [U] = needs a live account).
+
+### A. Additional GREEN-zone (sanctioned) AccuLynx-native paths we can add to the onboarding playbook
+
+| Path | What it captures | Confidence |
+|---|---|---|
+| **"Message history upon request"** — Fall-2024 release notes: full job-message history "can be exported from AccuLynx **upon request**" | Comms/message board, support-mediated (scope/format unknown) | confirmed-official mechanism; [U] yield |
+| **Company Documents → multi-select bulk Download** (Tools → Company Documents → check boxes → Actions) | The **template library / company docs** — NOT trapped; all roles can download | confirmed-official |
+| **Job History page → Export PDF/CSV** (filters by date/type/user; types incl. Email, Estimate, Order, Payment, Appointment, File uploads) | Richer per-job event export than the older Export History/Comments | confirmed-official ([U] whether body text is included) |
+| **Homeowner e-sign email copy** — completion sends the homeowner a "Signing Completed" email with a **Download Document** PDF link; invoices emailed as PDF | Signed contracts + invoices have an **out-of-band copy** in the homeowner's inbox | confirmed-official |
+| **API `GET /jobs/{id}/history`** (paginated, date-filtered) | Scriptable **bulk** change-history pull (AppConnections-gated; [U] whether comment text is in payload) | confirmed-official (API ref) |
+
+### B. Integration-partner harvesting — the reframe (legally clean, often complete)
+
+If the contractor used any of these alongside AccuLynx, the data lives in **their own separate
+account** with the partner — export it from THAT side (their login, their rights, no AccuLynx ToS
+issue). This is the single most important addition to our strategy.
+
+| Partner (if in use) | What you recover from their side | Export mechanism | Confidence |
+|---|---|---|---|
+| **QuickBooks** (Online/Desktop) | Customers, jobs, **invoices w/ line detail, payments** — permanently in the contractor's QB file | Native QB export | confirmed-official (sync scope documented) |
+| **CompanyCam** | **Photos/videos + tags** captured through CC (one-way into AccuLynx, so originals stay in CC) | Per-project "Download All Photos" zip + CSV export | confirmed-official |
+| **CallRail** | **Calls, SMS, forms, leads, recordings** | Account-level export → zip | confirmed-official |
+| **EagleView / Hover / GAF QuickMeasure** | Measurement reports/PDF/XML/3D | Re-downloadable from the contractor's storefront/order history | confirmed-official |
+| **HubSpot** (AppConnection) | Mirrored contacts/leads + milestone/approved-value | HubSpot native export | confirmed-official |
+| **Supplier portals (ABC/SRS/QXO)** | Order history, invoices, statements; pricing | myABCsupply etc. export/download | corroborated |
+| **Google/Outlook Calendar sync** | Appointments (if sync direction included AccuLynx→calendar) persist in the user's own calendar | Already in their calendar | confirmed-official |
+
+**Implication for the product:** the onboarding flow should **ask which integrations they used**
+and route each to the partner's own export — this recovers photos (CompanyCam), SMS (CallRail),
+financials (QuickBooks), and measurements (EagleView/Hover) **without touching AccuLynx at all**.
+It won't cover AccuLynx-*native* photos/SMS (shot/sent inside AccuLynx), but for many contractors
+it closes a large share of the gap in the green zone.
+
+### Updated per-item picture (deltas only)
+
+- **Message board/history:** upgrade — now THREE sanctioned paths (per-job export loop; "upon
+  request" support export; `GET /jobs/{id}/history` API). Strongest gap-item story.
+- **Photos:** if CompanyCam was used, this moves from "lossy manual" to "clean, from CC's side."
+  AccuLynx-native photos stay lossy/manual.
+- **Documents/templates:** company **template library** is bulk-downloadable (new); per-job job
+  documents still manual; signed PDFs also recoverable from homeowner inboxes (new).
+- **SMS:** still no AccuLynx export — BUT if CallRail was the texting tool, it's fully exportable.
+  AccuLynx-provisioned-number texts remain uncapturable.
+- **Automations:** unchanged — rebuild.
+
+### New live-account unknowns (add to the probe list)
+
+Whether the photo-share-link recipient view has a download button; whether Job History CSV /
+`GET /jobs/{id}/history` include message/email/SMS **body text**; the scope/format/fee of the
+"upon request" message export and the §15 written export; the DataMart table catalog (line items?
+message metadata?); whether Company Documents bulk-download preserves original file formats.
+
+*Sources for this addendum appended to sources/migration.md → Round 4.*
