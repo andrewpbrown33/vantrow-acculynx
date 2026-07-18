@@ -327,3 +327,25 @@ them."
   support-mediated archive may exist (ToS §15). **Verify.**
 
 Prepared under docs/legal/clean-room-protocol.md; all sources logged in sources/migration.md.
+
+---
+
+## Addendum (2026-07-18): visual export guides + playbook corrections
+
+A follow-up pass (sources: `sources/migration.md` → Round 2, S-MIG-V01…V07) found official,
+linkable visual guides and produced three corrections now applied to the onboarding playbook:
+
+1. **A dedicated one-click contacts/leads export exists** (official KB, screenshots):
+   your name → Account Settings → Manage Leads/Contacts → Export Contacts and Leads →
+   Download .CSV. Requires Company/Location Administrator. Now the PRIMARY contacts path;
+   the Reports export remains the path for jobs + custom fields.
+2. **Reports-path refinements:** set Reference Date → Lead Date (so old leads aren't
+   filtered out); the list is the "Report Library"; columns via Actions → Edit Report →
+   Edit next to Columns.
+3. **Message history softened:** per-job Message Board + Change History CAN export
+   (Job Menu → Settings → Export History/Comments) — but only one job at a time; SMS
+   threads, photos/documents, and automations still have no bulk export.
+
+Product policy: the onboarding page links OUT to the official article, a live third-party
+screenshot walkthrough, and the official Reports video — no AccuLynx screenshots are
+embedded on our surfaces (trade-dress guardrail).

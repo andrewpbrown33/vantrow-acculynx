@@ -62,37 +62,106 @@ export default function OnboardingPage() {
           <SectionHeading n={1} title="Export your data from AccuLynx" />
           <div className="mt-4 space-y-4 text-sm text-foreground">
             <p className="text-muted">
-              AccuLynx lets any customer export their structured records to a
-              spreadsheet from the Reports area. Here&rsquo;s the path:
+              There are two ways to get your records out of AccuLynx. The quick
+              built-in export covers contacts and leads; the Reports export adds
+              jobs and any custom fields.
             </p>
-            <ol className="ml-1 space-y-2">
-              {[
-                "Open the Reports tab and pick a contact- or jobs-oriented report (e.g. Jobs Report or a contacts report).",
-                "Set the date range to All Data so nothing is left behind.",
-                "Choose Actions → Edit Report → Columns, and tick the fields you want: contact name, phone, email, property address, job stage, dates, lead source, and any custom fields.",
-                "Apply, then Actions → Download / Export and choose CSV.",
-                "Repeat for both your Contacts and your Jobs so you have each as its own CSV.",
-              ].map((step, i) => (
-                <li key={i} className="flex gap-3">
-                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10 text-xs font-semibold text-brand">
-                    {i + 1}
-                  </span>
-                  <span>{step}</span>
-                </li>
-              ))}
-            </ol>
+
+            <div className="rounded-lg border border-foreground/10 p-4">
+              <p className="font-semibold text-foreground">
+                Fastest: the built-in contacts export{" "}
+                <span className="font-normal text-muted">
+                  (needs a Company or Location Administrator login)
+                </span>
+              </p>
+              <ol className="ml-1 mt-3 space-y-2">
+                {[
+                  "In AccuLynx, click your name (top right) → Account Settings.",
+                  "Expand Manage Leads/Contacts and choose Export Contacts and Leads.",
+                  "Pick Contacts (and Leads — tick Include Prospects if you want them), then Download as .CSV.",
+                ].map((step, i) => (
+                  <li key={i} className="flex gap-3">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10 text-xs font-semibold text-brand">
+                      {i + 1}
+                    </span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="rounded-lg border border-foreground/10 p-4">
+              <p className="font-semibold text-foreground">
+                For jobs + custom fields: the Reports export
+              </p>
+              <ol className="ml-1 mt-3 space-y-2">
+                {[
+                  "Open the Reports tab and pick a jobs-oriented report from the Report Library (e.g. the Jobs Report or Sales Report).",
+                  "Set the date range to All Data, and set Reference Date to Lead Date so your oldest leads aren't filtered out.",
+                  "Choose Actions → Edit Report, click Edit next to Columns, and tick the fields you want: contact name, phone, email, property address, job stage, dates, lead source, and any custom fields. Apply.",
+                  "Choose Actions → Download / Export and pick CSV (or Excel).",
+                ].map((step, i) => (
+                  <li key={i} className="flex gap-3">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10 text-xs font-semibold text-brand">
+                      {i + 1}
+                    </span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="rounded-lg border border-brand/20 bg-brand/5 p-4">
+              <p className="text-sm font-semibold text-brand-dark">
+                See it done (guides with real AccuLynx screenshots)
+              </p>
+              <ul className="mt-2 space-y-1.5">
+                {[
+                  {
+                    href: "https://support.acculynx.com/hc/en-us/articles/203164825-Export-Contacts-and-Leads",
+                    label:
+                      "AccuLynx's official guide: Export Contacts and Leads (step-by-step screenshots)",
+                  },
+                  {
+                    href: "https://learn.projectmapit.com/help-center/how-do-i-download-a-spreadsheet-from-acculynx",
+                    label:
+                      "Screenshot walkthrough of the Reports export (Reports → Edit Report → Columns → Download)",
+                  },
+                  {
+                    href: "https://support.acculynx.com/hc/en-us/articles/32038851975565-Reports-19-12",
+                    label:
+                      "AccuLynx's official video tour of the Reports area (19 min)",
+                  },
+                ].map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm font-medium text-brand underline underline-offset-2 hover:text-brand-dark"
+                    >
+                      {link.label} &#8599;
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             <div className="rounded-lg border border-foreground/10 bg-foreground/[0.02] p-4">
               <p className="text-sm font-semibold text-foreground">
                 What doesn&rsquo;t come out in the export
               </p>
               <p className="mt-1 text-sm text-muted">
-                The spreadsheet export covers contacts, jobs, and custom fields.
-                It does <span className="font-semibold text-foreground">not</span>{" "}
-                include your <span className="font-medium">photos, documents and
-                signed PDFs, message and text history, or automations and
-                templates</span>. Those don&rsquo;t bulk-export from AccuLynx &mdash;
-                our team migrates the files by hand (Section 3) and automations get
-                rebuilt fresh in {brand.name}.
+                The spreadsheet exports cover contacts, leads, jobs, and custom
+                fields. They do{" "}
+                <span className="font-semibold text-foreground">not</span> include
+                your <span className="font-medium">photos, documents and signed
+                PDFs, text/SMS threads, or automations and templates</span> &mdash;
+                those don&rsquo;t bulk-export from AccuLynx. (Message-board history
+                can be exported, but only one job at a time via Job Menu &rarr;
+                Settings &rarr; Export History/Comments.) Our team migrates the
+                files by hand (Section 3) and automations get rebuilt fresh in{" "}
+                {brand.name}.
               </p>
             </div>
           </div>
