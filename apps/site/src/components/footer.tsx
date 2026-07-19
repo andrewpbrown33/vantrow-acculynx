@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { brand } from "@vantrow/brand";
+import { Wordmark } from "@vantrow/brand/components";
 import { footerNav } from "@/lib/nav";
 
 export function Footer() {
@@ -8,11 +9,19 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div className="max-w-sm">
-            <p className="text-lg font-bold tracking-tight text-brand-dark">
-              {brand.name}
+            <p className="text-lg font-bold text-brand-dark">
+              <Wordmark />
             </p>
             <p className="mt-1 text-sm text-muted">
-              {brand.name} is {brand.endorsement}.
+              {brand.name} is{" "}
+              <a
+                href={brand.parentUrl}
+                rel="noopener"
+                className="underline underline-offset-2 transition-colors hover:text-foreground"
+              >
+                {brand.endorsement}
+              </a>
+              .
             </p>
             <p className="mt-3 text-sm text-muted">
               Questions?{" "}

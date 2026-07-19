@@ -188,6 +188,20 @@ const moduleSections: ModuleSection[] = [
       "Multi-location management UI — office scoping is baked into the schema now, with the admin surface following",
     ],
   },
+  {
+    id: "switching",
+    title: "Switching without losing your history",
+    body: "Leaving software you've used for years is the scariest part of any change, so we treat the move itself as a product. Bring what your current system lets you export, recover the rest from the tools you ran alongside it, and know before you commit exactly what does and doesn't carry over.",
+    features: [
+      "Contact and customer import from any CSV export, with smart column mapping",
+      "Onboarding that asks which tools you already use — measurements, photos, accounting, phone — and walks you through each partner's own clean export",
+      "A straight answer up front about what your old platform lets you take with you, and what it doesn't",
+    ],
+    roadmap: [
+      "Guided migration playbooks for the most common roofing platforms, including job history and pipeline import",
+      "Concierge migration help for documents and photos — honestly scoped as best-effort, because some systems don't let that data out",
+    ],
+  },
 ];
 
 export default function ProductPage() {
@@ -199,7 +213,8 @@ export default function ProductPage() {
             One platform for the whole job
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-muted">
-            From the first knock to the final payment, {brand.name} keeps sales,
+            From the first knock to the final payment, {brand.name}{" "}
+            keeps sales,
             production, and the homeowner on the same page &mdash; literally.
             We&rsquo;re pre-launch, so below we&rsquo;re straight about what
             ships day one and what&rsquo;s on the roadmap.

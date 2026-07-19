@@ -176,7 +176,8 @@ export default function VsAccuLynxPage() {
       </h1>
 
       <p className="mt-4 max-w-2xl text-lg text-muted">
-        A capability-by-capability look at how {brand.name} and AccuLynx approach
+        A capability-by-capability look at how {brand.name}{" "}
+        and AccuLynx approach
         running a roofing business &mdash; factual, dated, and sourced. Where
         AccuLynx is genuinely ahead of us today, we say so.
       </p>
@@ -227,7 +228,7 @@ export default function VsAccuLynxPage() {
                 >
                   {row.capability}
                   {row.conceded ? (
-                    <span className="mt-1 block text-xs font-medium uppercase tracking-wider text-accent">
+                    <span className="mt-1 block text-xs font-medium uppercase tracking-wider text-brand-accent-ink">
                       AccuLynx leads today
                     </span>
                   ) : null}

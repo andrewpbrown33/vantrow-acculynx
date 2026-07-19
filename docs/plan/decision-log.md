@@ -16,6 +16,7 @@ Dated record of program decisions. Newest first.
 | 2026-07-16 | **Brand architecture (confirmed)** | Endorsed brand: standalone name + logo + domain with "a Vantrow company" endorsement line | Andrew |
 | 2026-07-16 | Naming round 2 | Round 1 field too crowded (only Kestrow had a clean available .com). Ran a domain-first round focused on roofing/exteriors-native names; only names with an available .com surfaced | Andrew |
 | 2026-07-16 | **Gate 1: brand name — Eaverow** | Chose Eaverow (round-2 #1 pick): "eave" + "-row" Vantrow echo, low risk, eaverow.com + eaverow.io available, no AccuLynx similarity, roofing-native with exteriors headroom | Andrew |
+| 2026-07-19 | **Gate 2: visual identity** | Camel `#b8956a` copied verbatim from the Vantrow palette (the mark's dot) as Eaverow's accent, worn on the wordmark's "row"; new deep-green direction (pine `#1d4b38` / spruce `#0f2e23` on warm paper `#f7f6f2`) supersedes Gate-1 slate/copper; `accentInk #856540` derived for AA text; Manrope typeface; parent linkage (`parentName`/`parentUrl`) added; logo mark selection pending (concepts A–D in `docs/brand/assets/`) | Andrew (color + direction via review questions; mark pick pending) |
 
 ## Gate 1 record
 
@@ -28,3 +29,24 @@ Dated record of program decisions. Newest first.
   SAME DAY per `docs/runbooks/01-domain-network-solutions.md` (re-verify availability first)_
 - **Trademark clearance:** _pending — counsel per `docs/runbooks/05-legal-counsel-checklist.md`;
   clear "eave"/"Eavor" phonetic neighbors + AccuLynx similarity in classes 9/42_
+
+## Gate 2 record (visual identity, 2026-07-19)
+
+- **The copied color:** camel `#b8956a` — Vantrow's `--camel`, the dot in the Vantrow mark
+  (getvantrow.com, accessed 2026-07-19). The single value shared with the parent, rendered on
+  the wordmark's "row" suffix and used as Eaverow's accent. Decided by Andrew (review Q1).
+- **Complementary direction:** new deep-green palette — pine `#1d4b38`, spruce `#0f2e23`,
+  warm paper `#f7f6f2`, ink `#0c1d15`, muted `#566a5e`, plus derived `accentInk #856540` for
+  AA accent text. Supersedes the Gate-1 slate-blue/copper placeholder. Decided by Andrew
+  (review Q2: "new direction — deep green").
+- **Wordmark:** lowercase two-tone "eave|row" via `brand.wordmark.suffix` + `splitWordmark()`
+  and the shared `<Wordmark />` component; prose keeps "Eaverow".
+- **Typeface:** Manrope (next/font, both apps).
+- **Parent linkage:** `parentName`/`parentUrl` added to the brand config; "a Vantrow company"
+  now links to getvantrow.com in the site footer/about and hero trust strip.
+- **Logo mark:** _pending — Andrew to pick from concepts A–D
+  (`docs/brand/assets/brand-board.html`); site ships wordmark-only with a neutral dot-tile
+  favicon until then (review Q4)._
+- **Applied to:** `packages/brand/src/brand.config.ts` + both apps; guidelines at
+  `docs/brand/brand-guidelines.md`; research grounding at
+  `docs/research/design/ui-ux-benchmarks.md`.

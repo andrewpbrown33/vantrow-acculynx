@@ -30,7 +30,8 @@ export default function PricingPage() {
         Simple pricing, everything included
       </h1>
       <p className="mt-4 max-w-2xl text-lg text-muted">
-        {brand.name} is pre-launch, so we haven&rsquo;t posted the public price
+        {brand.name}{" "}
+        is pre-launch, so we haven&rsquo;t posted the public price
         list yet &mdash; but here&rsquo;s the part that won&rsquo;t change: one
         published price with everything bundled, and no nickel-and-diming for
         the features you use every day.

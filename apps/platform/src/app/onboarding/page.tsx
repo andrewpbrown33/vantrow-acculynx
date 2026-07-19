@@ -232,7 +232,8 @@ export default function OnboardingPage() {
           Ready to get to work?
         </p>
         <p className="mx-auto mt-1 max-w-md text-sm text-muted">
-          Head into {brand.name} now &mdash; your imported contacts are waiting,
+          Head into {brand.name}{" "}
+          now &mdash; your imported contacts are waiting,
           and anything we migrate for you will land straight in your pipeline.
         </p>
         <div className="mt-4 flex flex-wrap items-center justify-center gap-3">

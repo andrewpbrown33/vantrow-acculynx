@@ -5,6 +5,14 @@
   "main": "./src/brand.config.ts",
   "types": "./src/brand.config.ts",
   "exports": {
-    ".": "./src/brand.config.ts"
+    ".": "./src/brand.config.ts",
+    "./components": "./src/components.tsx"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "react": "19.2.7",
+    "@types/react": "^19.2.17"
   }
 }

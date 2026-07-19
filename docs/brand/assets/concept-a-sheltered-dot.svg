@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Eaverow mark — concept A, Sheltered Dot">
+  <!-- Gable (eave) stroke in Eaverow pine; the camel dot — the color copied
+       from the parent Vantrow mark — sheltered beneath the roofline.
+       Family grammar: 100 viewBox, stroke 13, round caps, r=10.5 dot. -->
+  <path d="M24 66 L50 30 L76 66" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="50" cy="62" r="10.5" fill="#b8956a"/>
+</svg>
