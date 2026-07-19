@@ -66,7 +66,7 @@ export default async function ContactsPage() {
           </p>
         </div>
         <Link
-          href="/onboarding"
+          href="/onboarding#import"
           className="rounded-md border border-brand/40 px-4 py-2 text-sm font-semibold text-brand transition-colors hover:bg-brand/5"
         >
           Import from AccuLynx
@@ -82,7 +82,7 @@ export default async function ContactsPage() {
           </p>
           <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
             <Link
-              href="/onboarding"
+              href="/onboarding#import"
               className="rounded-md bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
             >
               Import from AccuLynx

@@ -87,9 +87,9 @@ export function SignForm({
           Thank you, {signerName.trim()}!
         </h2>
         <p className="mt-2 text-emerald-800">
-          Your signature has been recorded and {orgName} has been notified. A
-          copy of your approved{" "}
-          {tier ? TIER_LABEL[tier].toLowerCase() : ""} option will be on its way.
+          Your signature has been recorded. {orgName} will see your approved{" "}
+          {tier ? TIER_LABEL[tier].toLowerCase() : ""} option in their dashboard
+          and follow up with next steps.
         </p>
       </div>
     );
