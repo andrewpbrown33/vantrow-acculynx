@@ -3,10 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { genId, genToken } from "./ids";
-import { estimateTotals, formatUsd } from "./money";
+import { estimateTotals, formatUsd, tierTotals } from "./money";
 import { getSession } from "./session";
 import { getServiceStore, getStore } from "./store";
 import type {
+  Estimate,
   EstimateOption,
   EstimateTier,
   LineItem,
@@ -15,6 +16,16 @@ import type {
 
 const TIERS: EstimateTier[] = ["good", "better", "best"];
 const PAYMENT_METHODS: PaymentMethod[] = ["card", "ach", "check", "cash"];
+
+// Money guards (review finding #3). Keep individual line values sane and the
+// resulting total under the Postgres `int4` ceiling ($21,474,836.47) that the
+// invoice money columns use — otherwise a legitimately large estimate throws an
+// unhandled `22003 numeric_value_out_of_range` at invoice creation in Supabase
+// mode (and silently stores bad data in file mode). `quantity * unitPriceCents`
+// also loses integer precision past 2^53, so we bound the factors too.
+const MAX_UNIT_PRICE_CENTS = 100_000_00; // $100,000 per unit
+const MAX_QUANTITY = 100_000;
+const MAX_INVOICE_TOTAL_CENTS = 2_000_000_000; // $20,000,000, safely under int4
 
 // ---- input helpers ---------------------------------------------------------
 
@@ -146,9 +157,45 @@ export async function createEstimate(
   const job = await store.getJob(jobId);
   if (!job || job.orgId !== org.id) throw new Error("Job not found.");
 
+  // #10: don't reopen estimating on a job that's already been invoiced/paid —
+  // its invoice froze the old totals. Additional work belongs to a new job.
+  if (job.stage === "invoiced" || job.stage === "paid") {
+    throw new Error(
+      "This job is already invoiced. Start a new job for additional work.",
+    );
+  }
+
   const options = normalizeOptions(data.options);
   if (options.length === 0) {
     throw new Error("Add at least one option with a priced line item.");
+  }
+
+  const taxRatePct = clampPct(data.taxRatePct);
+  const discountCents = Math.max(0, Math.round(Number(data.discountCents) || 0));
+
+  // #3: bound each line, then reject if any tier's total would overflow int4.
+  // We check every present tier because any of them can be the one signed.
+  for (const option of options) {
+    for (const li of option.lineItems) {
+      if (li.unitPriceCents > MAX_UNIT_PRICE_CENTS || li.quantity > MAX_QUANTITY) {
+        throw new Error(
+          `A line item is too large. Keep unit price under ${formatUsd(
+            MAX_UNIT_PRICE_CENTS,
+          )} and quantity under ${MAX_QUANTITY.toLocaleString()}.`,
+        );
+      }
+    }
+  }
+  // Only options/taxRatePct/discountCents/selectedTier are read by tierTotals.
+  const totalsInput = { options, taxRatePct, discountCents } as unknown as Estimate;
+  for (const option of options) {
+    if (tierTotals(totalsInput, option.tier).totalCents > MAX_INVOICE_TOTAL_CENTS) {
+      throw new Error(
+        `This estimate's total exceeds the ${formatUsd(
+          MAX_INVOICE_TOTAL_CENTS,
+        )} maximum. Split it into multiple estimates.`,
+      );
+    }
   }
 
   const estimate = await store.createEstimate({
@@ -156,8 +203,8 @@ export async function createEstimate(
     jobId,
     status: "draft",
     options,
-    taxRatePct: clampPct(data.taxRatePct),
-    discountCents: Math.max(0, Math.round(Number(data.discountCents) || 0)),
+    taxRatePct,
+    discountCents,
   });
 
   await store.updateJob(jobId, { stage: "estimating" });
@@ -191,6 +238,12 @@ export async function sendEstimate(
   }
   if (estimate.status === "signed") {
     throw new Error("This estimate has already been signed.");
+  }
+
+  // #10: an already-invoiced/paid job shouldn't be sending estimates for signing.
+  const job = await store.getJob(estimate.jobId);
+  if (job && (job.stage === "invoiced" || job.stage === "paid")) {
+    throw new Error("This job is already invoiced and can't send new estimates.");
   }
 
   const token = estimate.sendToken ?? genToken();
@@ -246,6 +299,12 @@ export async function signEstimate(
   if (estimate.status === "declined") {
     return { ok: false, error: "This estimate is no longer available." };
   }
+  // #10: if the job was already invoiced/paid (e.g. off a different signed
+  // estimate), don't let a stale link sign and regress it back to `won`.
+  const signJob = await store.getJob(estimate.jobId);
+  if (signJob && (signJob.stage === "invoiced" || signJob.stage === "paid")) {
+    return { ok: false, error: "This estimate is no longer available." };
+  }
 
   const signerName = str(input.signerName as FormDataEntryValue);
   if (!signerName) {
@@ -295,8 +354,15 @@ export async function createInvoice(jobId: string): Promise<void> {
   const job = await store.getJob(jobId);
   if (!job || job.orgId !== org.id) throw new Error("Job not found.");
 
+  // #10: a job can carry more than one signed estimate (e.g. a re-send that was
+  // signed again). Invoice the LATEST one deterministically, not whichever the
+  // store happens to return first.
   const estimates = await store.listEstimates(jobId);
-  const signed = estimates.find((e) => e.status === "signed");
+  const signed = estimates
+    .filter((e) => e.status === "signed")
+    .sort((a, b) =>
+      (b.signedAt ?? b.createdAt).localeCompare(a.signedAt ?? a.createdAt),
+    )[0];
   if (!signed) {
     throw new Error("This job has no signed estimate to invoice yet.");
   }
@@ -351,6 +417,11 @@ export async function recordPayment(
 
   const invoice = await store.getInvoice(invoiceId);
   if (!invoice || invoice.orgId !== org.id) throw new Error("Invoice not found.");
+
+  // #11: a voided invoice can carry a positive balance — don't let it collect.
+  if (invoice.status === "void") {
+    throw new Error("This invoice was voided and can no longer accept payments.");
+  }
 
   const balance = invoice.totalCents - invoice.amountPaidCents;
   if (balance <= 0) throw new Error("This invoice is already paid in full.");
