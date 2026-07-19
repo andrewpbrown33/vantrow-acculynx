@@ -40,6 +40,7 @@ export const PIPELINE_STAGES: JobStage[] = [
 // ---- Create/patch input shapes (the store owns id + timestamp generation) ----
 
 export type NewOrg = Omit<Org, "id" | "createdAt">;
+export type OrgPatch = Partial<Omit<Org, "id" | "createdAt">>;
 export type NewUser = Omit<User, "id">;
 export type NewContact = Omit<Contact, "id" | "createdAt">;
 export type NewJob = Omit<Job, "id" | "createdAt" | "updatedAt">;
@@ -87,6 +88,7 @@ export interface PlatformStore {
   listOrgs(): Promise<Org[]>;
   getOrg(id: string): Promise<Org | undefined>;
   createOrg(input: NewOrg): Promise<Org>;
+  updateOrg(id: string, patch: OrgPatch): Promise<Org>;
   // User
   listUsers(orgId: string): Promise<User[]>;
   getUser(id: string): Promise<User | undefined>;
@@ -223,6 +225,14 @@ class FileStore implements PlatformStore {
     return this.write((d) => {
       const org: Org = { ...input, id: genId("org"), createdAt: nowIso() };
       d.orgs.push(org);
+      return clone(org);
+    });
+  }
+  updateOrg(id: string, patch: OrgPatch): Promise<Org> {
+    return this.write((d) => {
+      const org = d.orgs.find((o) => o.id === id);
+      if (!org) throw new Error(`Org ${id} not found`);
+      Object.assign(org, patch);
       return clone(org);
     });
   }
@@ -473,6 +483,8 @@ interface OrgRow {
   id: string;
   name: string;
   created_at: string;
+  stripe_account_id: string | null;
+  stripe_charges_enabled: boolean | null;
 }
 interface ContactRow {
   id: string;
@@ -564,7 +576,13 @@ function compact<T extends Record<string, unknown>>(obj: T): Record<string, unkn
 }
 
 export function rowToOrg(r: OrgRow): Org {
-  return { id: r.id, name: r.name, createdAt: r.created_at };
+  return {
+    id: r.id,
+    name: r.name,
+    createdAt: r.created_at,
+    stripeAccountId: r.stripe_account_id ?? undefined,
+    stripeChargesEnabled: r.stripe_charges_enabled ?? undefined,
+  };
 }
 function rowToContact(r: ContactRow): Contact {
   return {
@@ -695,6 +713,22 @@ class SupabaseStore implements PlatformStore {
       .select()
       .single();
     if (error) this.fail("createOrg", error.message);
+    return rowToOrg(data as OrgRow);
+  }
+  async updateOrg(id: string, patch: OrgPatch): Promise<Org> {
+    const { data, error } = await this.db
+      .from("orgs")
+      .update(
+        compact({
+          name: patch.name,
+          stripe_account_id: patch.stripeAccountId,
+          stripe_charges_enabled: patch.stripeChargesEnabled,
+        }),
+      )
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) this.fail("updateOrg", error.message);
     return rowToOrg(data as OrgRow);
   }
 

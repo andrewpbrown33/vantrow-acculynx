@@ -39,6 +39,10 @@ export interface Org {
   id: string;
   name: string;
   createdAt: string;
+  /** Stripe Connect account id for this contractor (they receive payments). */
+  stripeAccountId?: string;
+  /** True once the connected account has completed onboarding + can charge. */
+  stripeChargesEnabled?: boolean;
 }
 
 export interface User {
