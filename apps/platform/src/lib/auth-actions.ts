@@ -228,8 +228,15 @@ export async function signIn(
           .select("*", { count: "exact", head: true })
           .eq("org_id", orgId),
       ]);
-      if ((jobs.count ?? 0) === 0 && (contacts.count ?? 0) === 0) {
+      const jobCount = jobs.count ?? 0;
+      const contactCount = contacts.count ?? 0;
+      if (jobCount === 0 && contactCount === 0) {
+        // Brand-new workspace — start the migration flow.
         destination = "/onboarding";
+      } else if (jobCount === 0) {
+        // #15: contacts imported but the pipeline is still empty — send them to
+        // Contacts (where the bulk "Add to pipeline" lives), not the barren board.
+        destination = "/contacts";
       }
     }
   } catch (e) {

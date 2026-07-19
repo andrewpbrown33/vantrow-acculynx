@@ -4,33 +4,23 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
   MAX_IMPORT_ROWS,
+  planContactImport,
   type ImportContactRow,
   type ImportSummary,
 } from "./migration";
 import { getSession } from "./session";
 import { getStore } from "./store";
 
-/** Digits-only phone key so `(555) 123-4567` and `555-123-4567` dedupe alike. */
-function normalizePhone(phone: string | undefined): string | undefined {
-  if (!phone) return undefined;
-  const digits = phone.replace(/\D/g, "");
-  return digits.length > 0 ? digits : undefined;
-}
-
-function trimmed(value: string | undefined): string | undefined {
-  const s = (value ?? "").trim();
-  return s.length > 0 ? s : undefined;
-}
-
 /**
  * Self-serve Contacts import (Migration Method A — the guided CSV importer).
  *
- * Creates a Contact per row for the caller's org. A row is SKIPPED when it has
- * no name, or when an existing org contact already shares the same email
- * (case-insensitive) OR the same normalized phone — so a corrected file can be
- * re-run without creating duplicates. Jobs are intentionally NOT created here
- * (that would flood the pipeline); imported contacts surface on /contacts where
- * the user turns the right ones into jobs.
+ * Creates a Contact per row for the caller's org, skipping duplicates. Dedupe
+ * logic lives in the pure `planContactImport` (see migration.ts, finding #12):
+ * email is the strong key, phone/address/name are weaker signals that only
+ * match when the name matches too — so a genuinely new contact sharing a phone
+ * isn't dropped, and re-running a name-only list doesn't multiply rows. Jobs are
+ * intentionally NOT created here (that would flood the pipeline); imported
+ * contacts surface on /contacts where the user turns the right ones into jobs.
  */
 export async function importContacts(
   rows: ImportContactRow[],
@@ -39,47 +29,21 @@ export async function importContacts(
   const store = await getStore();
 
   const existing = await store.listContacts(org.id);
-  const seenEmails = new Set<string>();
-  const seenPhones = new Set<string>();
-  for (const c of existing) {
-    const email = c.email?.toLowerCase().trim();
-    if (email) seenEmails.add(email);
-    const phone = normalizePhone(c.phone);
-    if (phone) seenPhones.add(phone);
-  }
-
   const capped = Array.isArray(rows) ? rows.slice(0, MAX_IMPORT_ROWS) : [];
-  let imported = 0;
-  let skipped = 0;
+  const { imports, skipped } = planContactImport(existing, capped);
 
-  for (const raw of capped) {
-    const name = (raw?.name ?? "").trim();
-    if (!name) {
-      skipped++;
-      continue;
-    }
-    const email = trimmed(raw.email);
-    const phone = trimmed(raw.phone);
-    const address = trimmed(raw.address);
-
-    const emailKey = email?.toLowerCase();
-    const phoneKey = normalizePhone(phone);
-    const isDuplicate =
-      (emailKey !== undefined && seenEmails.has(emailKey)) ||
-      (phoneKey !== undefined && seenPhones.has(phoneKey));
-    if (isDuplicate) {
-      skipped++;
-      continue;
-    }
-
-    await store.createContact({ orgId: org.id, name, email, phone, address });
-    if (emailKey) seenEmails.add(emailKey);
-    if (phoneKey) seenPhones.add(phoneKey);
-    imported++;
+  for (const row of imports) {
+    await store.createContact({
+      orgId: org.id,
+      name: row.name,
+      email: row.email,
+      phone: row.phone,
+      address: row.address,
+    });
   }
 
   revalidatePath("/contacts");
-  return { imported, skipped, total: capped.length };
+  return { imported: imports.length, skipped, total: capped.length };
 }
 
 /**

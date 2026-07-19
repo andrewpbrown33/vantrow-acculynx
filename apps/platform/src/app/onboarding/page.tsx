@@ -184,7 +184,10 @@ export default function OnboardingPage() {
         </section>
 
         {/* Section 3 — Self-serve contacts import */}
-        <section className="rounded-xl border border-foreground/10 bg-white p-6">
+        <section
+          id="import"
+          className="scroll-mt-24 rounded-xl border border-foreground/10 bg-white p-6"
+        >
           <SectionHeading n={3} title="Import your contacts" />
           <p className="mt-3 text-sm text-muted">
             Upload the Contacts CSV you just exported. We&rsquo;ll auto-match the
