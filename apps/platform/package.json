@@ -16,7 +16,8 @@
     "next": "16.2.10",
     "papaparse": "5.5.3",
     "react": "19.2.7",
-    "react-dom": "19.2.7"
+    "react-dom": "19.2.7",
+    "stripe": "^22.3.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.2",
