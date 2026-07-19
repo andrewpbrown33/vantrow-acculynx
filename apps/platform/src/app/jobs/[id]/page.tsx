@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createInvoice, markJobDead, reopenJob } from "@/lib/actions";
+import { SharePortalLink } from "@/components/share-portal-link";
 import { StageBadge } from "@/components/stage-badge";
 import { latestEstimate } from "@/lib/job";
 import { estimateTotals, formatUsd } from "@/lib/money";
@@ -296,6 +297,14 @@ export default async function JobPage({
                 </button>
               </form>
             )}
+          </div>
+
+          {/* Homeowner portal — the live client dashboard link (Gap 3A). */}
+          <div className="mt-4 rounded-xl border border-foreground/10 bg-white p-4">
+            <h2 className="text-sm font-semibold text-foreground">
+              Homeowner portal
+            </h2>
+            <SharePortalLink jobId={job.id} />
           </div>
         </aside>
       </div>

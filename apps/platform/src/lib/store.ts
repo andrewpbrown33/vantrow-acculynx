@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { genId } from "./ids";
+import { genId, genToken } from "./ids";
 import { buildSeedDataset } from "./seed";
 import { createServerSupabase, isSupabaseConfigured } from "./supabase/server";
 import { createServiceSupabase } from "./supabase/service";
@@ -100,6 +100,8 @@ export interface PlatformStore {
   listJobs(orgId: string): Promise<Job[]>;
   jobsByStage(orgId: string): Promise<Record<JobStage, Job[]>>;
   getJob(id: string): Promise<Job | undefined>;
+  /** Public homeowner-portal lookup by unguessable token (service-role path). */
+  getJobByPortalToken(token: string): Promise<Job | undefined>;
   createJob(input: NewJob): Promise<Job>;
   updateJob(id: string, patch: JobPatch): Promise<Job>;
   // Estimate
@@ -293,7 +295,13 @@ class FileStore implements PlatformStore {
   createJob(input: NewJob): Promise<Job> {
     return this.write((d) => {
       const ts = nowIso();
-      const job: Job = { ...input, id: genId("job"), createdAt: ts, updatedAt: ts };
+      const job: Job = {
+        ...input,
+        portalToken: input.portalToken ?? genToken(),
+        id: genId("job"),
+        createdAt: ts,
+        updatedAt: ts,
+      };
       d.jobs.push(job);
       return clone(job);
     });
@@ -318,6 +326,9 @@ class FileStore implements PlatformStore {
     return this.read((d) =>
       clone(d.estimates.find((e) => e.sendToken === token)),
     );
+  }
+  getJobByPortalToken(token: string): Promise<Job | undefined> {
+    return this.read((d) => clone(d.jobs.find((j) => j.portalToken === token)));
   }
   createEstimate(input: NewEstimate): Promise<Estimate> {
     return this.write((d) => {
@@ -481,6 +492,7 @@ interface JobRow {
   lead_source: string | null;
   priority: JobPriority | null;
   dead_reason: string | null;
+  portal_token: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -575,6 +587,7 @@ function rowToJob(r: JobRow): Job {
     leadSource: r.lead_source ?? undefined,
     priority: r.priority ?? undefined,
     deadReason: r.dead_reason ?? undefined,
+    portalToken: r.portal_token ?? undefined,
     createdAt: r.created_at,
     updatedAt: r.updated_at,
   };
@@ -817,12 +830,22 @@ class SupabaseStore implements PlatformStore {
           lead_source: input.leadSource ?? null,
           priority: input.priority ?? undefined,
           dead_reason: input.deadReason ?? null,
+          portal_token: input.portalToken ?? genToken(),
         }),
       )
       .select()
       .single();
     if (error) this.fail("createJob", error.message);
     return rowToJob(data as JobRow);
+  }
+  async getJobByPortalToken(token: string): Promise<Job | undefined> {
+    const { data, error } = await this.db
+      .from("jobs")
+      .select("*")
+      .eq("portal_token", token)
+      .maybeSingle();
+    if (error) this.fail("getJobByPortalToken", error.message);
+    return data ? rowToJob(data as JobRow) : undefined;
   }
   async updateJob(id: string, patch: JobPatch): Promise<Job> {
     const { data, error } = await this.db
@@ -835,6 +858,7 @@ class SupabaseStore implements PlatformStore {
           lead_source: patch.leadSource,
           priority: patch.priority,
           dead_reason: patch.deadReason,
+          portal_token: patch.portalToken,
           updated_at: new Date().toISOString(),
         }),
       )
