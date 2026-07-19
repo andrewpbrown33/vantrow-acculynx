@@ -65,6 +65,20 @@ export interface JobBundle {
 }
 
 /**
+ * A job plus just the relations the pipeline board needs (contact + the
+ * estimates/invoices used to compute display value). `listPipeline` returns
+ * these for a whole org in ONE pass, so the board avoids a per-job bundle
+ * fetch (which was O(jobs) full-file reads / N+1 queries — see
+ * docs/review/2026-07-platform-functional-review.md finding #2).
+ */
+export interface PipelineEntry {
+  job: Job;
+  contact: Contact | undefined;
+  estimates: Estimate[];
+  invoices: Invoice[];
+}
+
+/**
  * Data-access contract for the platform. A single implementation (FileStore)
  * backs dev + verification today; a SupabaseStore is a follow-up (see getStore).
  */
@@ -111,6 +125,8 @@ export interface PlatformStore {
   createActivity(input: NewActivity): Promise<Activity>;
   // Composite
   getJobBundle(jobId: string): Promise<JobBundle | undefined>;
+  /** All of an org's jobs + the relations the pipeline needs, in one pass. */
+  listPipeline(orgId: string): Promise<PipelineEntry[]>;
 }
 
 /** Walks up from cwd to the pnpm workspace root; falls back to cwd. */
@@ -131,6 +147,17 @@ function nowIso(): string {
 /** Structured-clone so callers can never mutate persisted state by reference. */
 function clone<T>(value: T): T {
   return structuredClone(value);
+}
+
+/** Group items carrying a `jobId` into a Map keyed by that jobId. */
+function groupByJob<T extends { jobId: string }>(items: T[]): Map<string, T[]> {
+  const m = new Map<string, T[]>();
+  for (const it of items) {
+    const bucket = m.get(it.jobId);
+    if (bucket) bucket.push(it);
+    else m.set(it.jobId, [it]);
+  }
+  return m;
 }
 
 /**
@@ -396,6 +423,26 @@ class FileStore implements PlatformStore {
           .filter((a) => a.jobId === jobId)
           .sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
       });
+    });
+  }
+  listPipeline(orgId: string): Promise<PipelineEntry[]> {
+    // Single read of the dataset; join contacts/estimates/invoices in memory.
+    return this.read((d) => {
+      const contactById = new Map(
+        d.contacts.filter((c) => c.orgId === orgId).map((c) => [c.id, c]),
+      );
+      const estByJob = groupByJob(d.estimates.filter((e) => e.orgId === orgId));
+      const invByJob = groupByJob(d.invoices.filter((i) => i.orgId === orgId));
+      return clone(
+        d.jobs
+          .filter((j) => j.orgId === orgId)
+          .map((job) => ({
+            job,
+            contact: contactById.get(job.contactId),
+            estimates: estByJob.get(job.id) ?? [],
+            invoices: invByJob.get(job.id) ?? [],
+          })),
+      );
     });
   }
 }
@@ -1035,6 +1082,26 @@ class SupabaseStore implements PlatformStore {
       this.listActivities(jobId),
     ]);
     return { job, contact, estimates, invoices, activities };
+  }
+  async listPipeline(orgId: string): Promise<PipelineEntry[]> {
+    // Four org-scoped queries total (not 1 + 5N). RLS scopes each to the org.
+    const [jobs, contacts, estRes, invRes] = await Promise.all([
+      this.listJobs(orgId),
+      this.listContacts(orgId),
+      this.db.from("estimates").select("*").eq("org_id", orgId),
+      this.db.from("invoices").select("*").eq("org_id", orgId),
+    ]);
+    if (estRes.error) this.fail("listPipeline estimates", estRes.error.message);
+    if (invRes.error) this.fail("listPipeline invoices", invRes.error.message);
+    const estByJob = groupByJob((estRes.data as EstimateRow[]).map(rowToEstimate));
+    const invByJob = groupByJob((invRes.data as InvoiceRow[]).map(rowToInvoice));
+    const contactById = new Map(contacts.map((c) => [c.id, c]));
+    return jobs.map((job) => ({
+      job,
+      contact: contactById.get(job.contactId),
+      estimates: estByJob.get(job.id) ?? [],
+      invoices: invByJob.get(job.id) ?? [],
+    }));
   }
 }
 

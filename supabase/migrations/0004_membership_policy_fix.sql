@@ -1,0 +1,23 @@
+-- 0004_membership_policy_fix.sql
+--
+-- SECURITY FIX (see docs/review/2026-07-platform-functional-review.md, finding #1).
+--
+-- The `members insert own memberships` policy added in 0003 had a WITH CHECK of
+-- only `user_id = auth.uid()` — it did NOT constrain `org_id` or `role`. That let
+-- any authenticated user insert `{user_id: self, org_id: <any org>, role: 'owner'}`
+-- and gain full read/write to another tenant via every membership-scoped policy.
+--
+-- Org + membership bootstrap runs via the SERVICE-ROLE key (see auth-actions.ts
+-- `bootstrapOrg` and session.ts `ensureOrgForUser`), which bypasses RLS entirely,
+-- so authenticated clients never legitimately insert memberships. We therefore
+-- drop the policy: with no INSERT policy, the authenticated/anon roles cannot
+-- create membership rows at all (default-deny), while the service role still can.
+--
+-- (The SELECT-own policy from 0003 stays — session resolution reads memberships
+-- via the user-context client. When team invites ship later, add a controlled
+-- INSERT policy that verifies the caller is authorized to join that specific org,
+-- never a blanket self-insert.)
+--
+-- How to apply: Supabase → SQL Editor → paste + Run (after 0002 and 0003). Idempotent.
+
+drop policy if exists "members insert own memberships" on public.memberships;
