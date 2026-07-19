@@ -8,6 +8,7 @@ const LINKS = [
   { href: "/pipeline", label: "Pipeline" },
   { href: "/contacts", label: "Contacts" },
   { href: "/leads/new", label: "New Lead" },
+  { href: "/settings/payments", label: "Payments" },
   { href: "/onboarding", label: "Get Started" },
 ];
 
