@@ -15,7 +15,8 @@ export default function EarlyAccessPage() {
       </h1>
       <p className="mt-4 text-lg text-muted">
         We&rsquo;re onboarding a limited group of roofing companies to build{" "}
-        {brand.name} around real jobs and real crews &mdash; with founding
+        {brand.name}{" "}
+        around real jobs and real crews &mdash; with founding
         pricing locked, everything bundled, and free one-click data export from
         day one. Tell us a little about your business and we&rsquo;ll reach out.
       </p>

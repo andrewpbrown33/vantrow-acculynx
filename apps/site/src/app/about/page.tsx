@@ -14,13 +14,28 @@ export default function AboutPage() {
       <h1 className="text-4xl font-bold tracking-tight text-brand-dark">
         About {brand.name}
       </h1>
-      <p className="mt-2 text-sm font-semibold uppercase tracking-wider text-brand">
-        {brand.name} is {brand.endorsement}
+      <p className="mt-2 text-sm font-semibold uppercase tracking-wider text-brand-accent-ink">
+        {brand.name} is{" "}
+        <a
+          href={brand.parentUrl}
+          rel="noopener"
+          className="underline underline-offset-2 transition-colors hover:text-brand-dark"
+        >
+          {brand.endorsement}
+        </a>
       </p>
 
       <div className="mt-8 space-y-6 leading-7 text-foreground">
         <p>
-          Our parent company, Vantrow, builds personalized, live client
+          Our parent company,{" "}
+          <a
+            href={brand.parentUrl}
+            rel="noopener"
+            className="font-medium text-brand underline underline-offset-2 hover:text-brand-dark"
+          >
+            {brand.parentName}
+          </a>
+          , builds personalized, live client
           dashboards &mdash; a single link where a customer can see exactly
           where their project stands, what&rsquo;s been done, and what happens
           next. We&rsquo;ve watched that one idea change how service businesses
@@ -28,7 +43,8 @@ export default function AboutPage() {
           &ldquo;did you get my email,&rdquo; more trust.
         </p>
         <p>
-          {brand.name} brings that idea to roofing. Roofing companies run the
+          {brand.name}{" "}
+          brings that idea to roofing. Roofing companies run the
           business from the truck &mdash; juggling leads, adjusters, crews,
           suppliers, and anxious homeowners across a dozen tools and a hundred
           phone calls, often on software that only files what they type and
@@ -38,7 +54,8 @@ export default function AboutPage() {
           included on every plan.
         </p>
         <p>
-          We&rsquo;re building {brand.name} in the open with a small group of
+          We&rsquo;re building {brand.name}{" "}
+          in the open with a small group of
           founding roofing companies who get founding pricing locked, everything
           bundled, and a direct line to shape the product. If that sounds like
           you, we&rsquo;d love to talk.

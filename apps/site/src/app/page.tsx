@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { brand } from "@vantrow/brand";
 import { routes } from "@/lib/nav";
+import { Button, Card, Container, Eyebrow } from "@/components/ui";
+import { DashboardPreview } from "@/components/dashboard-preview";
 
 const pillars = [
   {
@@ -56,47 +58,70 @@ const modules = [
   },
 ];
 
+/** Factual, pre-launch-true trust signals shown under the hero CTAs. */
+const trustSignals = [
+  { text: brand.endorsement, href: brand.parentUrl },
+  { text: "Founding pricing locked for life" },
+  { text: "Free one-click data export" },
+];
+
 export default function HomePage() {
   return (
     <>
       {/* Hero */}
       <section className="bg-gradient-to-b from-white to-background">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+        <Container className="py-20 sm:py-28">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-wider text-brand">
-              {brand.tagline}
-            </p>
-            <h1 className="mt-4 text-4xl font-bold tracking-tight text-brand-dark sm:text-5xl">
+            <Eyebrow>{brand.tagline}</Eyebrow>
+            <h1 className="mt-4 text-4xl font-bold tracking-tight text-brand-dark sm:text-6xl">
               One app that runs the whole roofing job &mdash; and shows your
               customer every step live
             </h1>
             <p className="mt-6 text-lg text-muted">
-              {brand.name} keeps everything from lead to collected cash in one
+              {brand.name}{" "}
+              keeps everything from lead to collected cash in one
               place, on your phone or your desktop &mdash; with the client
               dashboard, texting, and e-sign included, not sold back to you as
               add-ons. Built AI-native from the data model up.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Link
-                href={routes.earlyAccess}
-                className="rounded-md bg-brand px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-dark"
-              >
+              <Button href={routes.earlyAccess}>
                 Become a founding contractor
-              </Link>
-              <Link
-                href="#live-dashboard"
-                className="rounded-md border border-brand px-6 py-3 text-base font-semibold text-brand transition-colors hover:bg-brand hover:text-white"
-              >
+              </Button>
+              <Button href="#live-dashboard" variant="outline">
                 See a live dashboard
-              </Link>
+              </Button>
             </div>
+            <ul className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted">
+              {trustSignals.map((signal, i) => (
+                <li key={signal.text} className="flex items-center gap-3">
+                  {i > 0 && (
+                    <span
+                      aria-hidden="true"
+                      className="size-1 rounded-full bg-brand-accent"
+                    />
+                  )}
+                  {signal.href ? (
+                    <a
+                      href={signal.href}
+                      rel="noopener"
+                      className="underline underline-offset-2 transition-colors hover:text-foreground"
+                    >
+                      {signal.text}
+                    </a>
+                  ) : (
+                    signal.text
+                  )}
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Value props */}
       <section aria-labelledby="value-props-heading">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <Container className="py-16">
           <h2
             id="value-props-heading"
             className="text-3xl font-bold tracking-tight text-brand-dark"
@@ -109,18 +134,15 @@ export default function HomePage() {
           </p>
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             {pillars.map((prop) => (
-              <article
-                key={prop.title}
-                className="rounded-lg border border-foreground/10 bg-white p-6 shadow-sm"
-              >
+              <Card key={prop.title} accent>
                 <h3 className="text-lg font-semibold text-brand-dark">
                   {prop.title}
                 </h3>
                 <p className="mt-2 text-sm leading-6 text-muted">{prop.body}</p>
-              </article>
+              </Card>
             ))}
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Live dashboard hook */}
@@ -129,52 +151,48 @@ export default function HomePage() {
         aria-labelledby="live-dashboard-heading"
         className="scroll-mt-20 bg-brand-dark text-white"
       >
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-          <p className="text-sm font-semibold uppercase tracking-wider text-white/70">
-            The part no roofing CRM ships the way we do
-          </p>
-          <h2
-            id="live-dashboard-heading"
-            className="mt-3 max-w-3xl text-3xl font-bold tracking-tight"
-          >
-            A live dashboard for every job, on every plan
-          </h2>
-          <p className="mt-4 max-w-2xl text-white/80">
-            Give every homeowner a branded link that stays true: job status,
-            appointments, documents, billing, payments, and messages, always
-            current &mdash; from the first appointment through the warranty, not
-            switched on at approval and off at completion. It&rsquo;s bundled on
-            every plan, and it&rsquo;s built to give adjusters and property
-            managers their own role-scoped view too.
-          </p>
-          <ul className="mt-8 grid gap-4 sm:grid-cols-3">
-            <li className="rounded-lg bg-white/10 p-4 text-sm leading-6">
-              Fewer &ldquo;where are we at?&rdquo; phone calls &mdash; the answer
-              is already on their screen.
-            </li>
-            <li className="rounded-lg bg-white/10 p-4 text-sm leading-6">
-              One source of truth that replaces the status email that never
-              seems to arrive.
-            </li>
-            <li className="rounded-lg bg-white/10 p-4 text-sm leading-6">
-              A branded, always-on surface that keeps earning referrals long
-              after the job is done.
-            </li>
-          </ul>
-          <p className="mt-8">
-            <Link
-              href={routes.earlyAccess}
-              className="inline-block rounded-md bg-white px-5 py-2.5 text-sm font-semibold text-brand-dark transition-colors hover:bg-white/90"
-            >
-              See a live dashboard
-            </Link>
-          </p>
-        </div>
+        <Container className="py-16 sm:py-20">
+          <div className="grid items-center gap-10 lg:grid-cols-2">
+            <div>
+              <Eyebrow onDark>
+                The part no roofing CRM ships the way we do
+              </Eyebrow>
+              <h2
+                id="live-dashboard-heading"
+                className="mt-3 text-3xl font-bold tracking-tight"
+              >
+                A live dashboard for every job, on every plan
+              </h2>
+              <p className="mt-4 text-white/80">
+                Give every homeowner a branded link that stays true: job status,
+                appointments, documents, billing, payments, and messages, always
+                current &mdash; from the first appointment through the warranty,
+                not switched on at approval and off at completion. It&rsquo;s
+                bundled on every plan, and it&rsquo;s built to give adjusters
+                and property managers their own role-scoped view too.
+              </p>
+              <p className="mt-4 text-white/80">
+                Fewer &ldquo;where are we at?&rdquo; phone calls, one source of
+                truth instead of the status email that never seems to arrive,
+                and a branded surface that keeps earning referrals after the
+                crew leaves.
+              </p>
+              <p className="mt-8">
+                <Button href={routes.earlyAccess} variant="onDark" size="md">
+                  See a live dashboard
+                </Button>
+              </p>
+            </div>
+            <div className="flex justify-center lg:justify-end">
+              <DashboardPreview />
+            </div>
+          </div>
+        </Container>
       </section>
 
       {/* Module teaser grid */}
       <section aria-labelledby="modules-heading" className="bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <Container className="py-16">
           <h2
             id="modules-heading"
             className="text-3xl font-bold tracking-tight text-brand-dark"
@@ -191,7 +209,11 @@ export default function HomePage() {
                 key={mod.title}
                 className="rounded-lg border border-foreground/10 bg-background p-6"
               >
-                <h3 className="text-base font-semibold text-brand-dark">
+                <h3 className="flex items-center gap-2 text-base font-semibold text-brand-dark">
+                  <span
+                    aria-hidden="true"
+                    className="size-1.5 shrink-0 rounded-full bg-brand-accent"
+                  />
                   {mod.title}
                 </h3>
                 <p className="mt-2 text-sm leading-6 text-muted">{mod.body}</p>
@@ -206,13 +228,13 @@ export default function HomePage() {
               Explore every module &rarr;
             </Link>
           </p>
-        </div>
+        </Container>
       </section>
 
       {/* Comparison teaser */}
       <section aria-labelledby="comparison-heading">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-          <div className="rounded-lg border border-foreground/10 bg-white p-8 shadow-sm sm:p-10">
+        <Container className="py-16">
+          <Card className="p-8 sm:p-10">
             <h2
               id="comparison-heading"
               className="text-2xl font-bold text-brand-dark"
@@ -225,20 +247,17 @@ export default function HomePage() {
               genuinely ahead of us today. Read it and decide for yourself.
             </p>
             <p className="mt-6">
-              <Link
-                href={routes.compare}
-                className="inline-block rounded-md bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
-              >
+              <Button href={routes.compare} size="md">
                 See the comparison
-              </Link>
+              </Button>
             </p>
-          </div>
-        </div>
+          </Card>
+        </Container>
       </section>
 
       {/* Early access CTA */}
-      <section aria-labelledby="cta-heading" className="bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-16 text-center sm:px-6">
+      <section aria-labelledby="cta-heading" className="bg-brand-accent/10">
+        <Container className="py-16 text-center">
           <h2
             id="cta-heading"
             className="text-3xl font-bold tracking-tight text-brand-dark"
@@ -252,14 +271,11 @@ export default function HomePage() {
             direct line to shape the product.
           </p>
           <p className="mt-8">
-            <Link
-              href={routes.earlyAccess}
-              className="inline-block rounded-md bg-brand px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-dark"
-            >
+            <Button href={routes.earlyAccess}>
               Become a founding contractor
-            </Link>
+            </Button>
           </p>
-        </div>
+        </Container>
       </section>
     </>
   );

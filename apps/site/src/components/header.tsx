@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { brand } from "@vantrow/brand";
+import { LogoMark, Wordmark } from "@vantrow/brand/components";
 import { appLinks, primaryNav, routes } from "@/lib/nav";
 
 export function Header() {
@@ -8,9 +8,10 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-4 sm:px-6">
         <Link
           href={routes.home}
-          className="text-lg font-bold tracking-tight text-brand-dark"
+          className="flex items-center gap-2 text-xl font-bold text-brand-dark"
         >
-          {brand.name}
+          <LogoMark className="h-7 w-7 text-brand" />
+          <Wordmark />
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-6 md:flex">

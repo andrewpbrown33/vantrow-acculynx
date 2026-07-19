@@ -26,10 +26,21 @@ export interface BrandConfig {
   supportEmail: string;
   /** Parent-company endorsement line, e.g. "a Vantrow company". */
   endorsement: string;
+  /** Parent company name behind the endorsement. */
+  parentName: string;
+  /** Parent company site the endorsement links to. */
+  parentUrl: string;
+  /**
+   * Optional two-tone wordmark: the trailing part of `name` rendered in the
+   * accent color (e.g. the "row" of "eaverow", echoing the parent's "-trow").
+   * Omit for a brand without a split — the wordmark renders one-tone.
+   */
+  wordmark?: { suffix: string };
   colors: {
     primary: string;
     primaryDark: string;
     accent: string;
+    accentInk: string;
     background: string;
     foreground: string;
     muted: string;
@@ -46,17 +57,46 @@ export const brand: BrandConfig = {
   appUrl: "https://app.eaverow.com",
   supportEmail: "hello@eaverow.com",
   endorsement: "a Vantrow company",
+  parentName: "Vantrow",
+  parentUrl: "https://getvantrow.com",
+  wordmark: { suffix: "row" },
   colors: {
-    // Eaverow palette: deep slate-blue (shelter/trust) with a warm copper
-    // accent (roofing metal, craft). Tuned for AA contrast on the light bg.
-    primary: "#1b4965",
-    primaryDark: "#0f2e42",
-    accent: "#c96a24",
-    background: "#f7f9fb",
-    foreground: "#0d1b26",
-    muted: "#566976",
+    // Eaverow palette: deep pine green (evergreen shelter, craft) with the
+    // camel accent copied verbatim from the parent Vantrow palette (--camel,
+    // the dot in Vantrow's mark) — the one shared family color, worn on the
+    // wordmark's "row" suffix. accentInk is our own darkened camel for
+    // AA-contrast accent text on light surfaces (camel itself is reserved for
+    // the logotype, decorative marks, and dark surfaces). Contrast table lives
+    // in docs/brand/brand-guidelines.md.
+    primary: "#1d4b38",
+    primaryDark: "#0f2e23",
+    accent: "#b8956a",
+    accentInk: "#856540",
+    background: "#f7f6f2",
+    foreground: "#0c1d15",
+    muted: "#566a5e",
   },
 };
+
+/**
+ * Splits the brand name into a wordmark prefix + accent-colored suffix.
+ * Derived from `name` + `wordmark.suffix` so the two can never drift apart;
+ * returns a null suffix (one-tone wordmark) when no split is configured or
+ * the configured suffix isn't actually the tail of the name.
+ */
+export function splitWordmark(b: BrandConfig): {
+  prefix: string;
+  suffix: string | null;
+} {
+  const s = b.wordmark?.suffix;
+  if (!s || !b.name.toLowerCase().endsWith(s.toLowerCase())) {
+    return { prefix: b.name, suffix: null };
+  }
+  return {
+    prefix: b.name.slice(0, b.name.length - s.length),
+    suffix: b.name.slice(b.name.length - s.length),
+  };
+}
 
 /**
  * Serializes a BrandConfig's colors as a `:root { ... }` CSS custom-property
@@ -69,6 +109,7 @@ export function brandCssVars(b: BrandConfig): string {
     `--brand-primary:${c.primary};`,
     `--brand-primary-dark:${c.primaryDark};`,
     `--brand-accent:${c.accent};`,
+    `--brand-accent-ink:${c.accentInk};`,
     `--brand-background:${c.background};`,
     `--brand-foreground:${c.foreground};`,
     `--brand-muted:${c.muted};`,

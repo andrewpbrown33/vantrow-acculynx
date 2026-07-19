@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eaverow — Brand Board v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary:#1d4b38; --primary-dark:#0f2e23; --accent:#b8956a; --accent-ink:#856540;
+    --bg:#f7f6f2; --fg:#0c1d15; --muted:#566a5e;
+    --vantrow-navy:#1b2a4e; --vantrow-paper:#f5f3eb;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{font-family:Manrope,ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--fg);line-height:1.55;padding:48px 24px 96px}
+  main{max-width:1080px;margin:0 auto}
+  h1{font-size:40px;letter-spacing:-0.02em}
+  h2{font-size:22px;margin:64px 0 6px;letter-spacing:-0.01em}
+  h2 + p.lead{color:var(--muted);max-width:720px;margin-bottom:20px;font-size:14.5px}
+  .eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent-ink)}
+  .wordmark{font-weight:800;letter-spacing:-0.02em;text-transform:lowercase}
+  .wordmark .row{color:var(--accent)}
+  .grid{display:grid;gap:16px}
+  .cols-2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .cols-3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .card{background:#fff;border:1px solid rgba(12,29,21,.10);border-radius:12px;padding:20px;box-shadow:0 1px 2px rgba(12,29,21,.05)}
+  .card.dark{background:var(--primary-dark);color:#fff;border-color:rgba(255,255,255,.12)}
+  .card h3{font-size:14px;font-weight:700;margin-bottom:2px}
+  .card .sub{font-size:12.5px;color:var(--muted)}
+  .card.dark .sub{color:rgba(255,255,255,.62)}
+  .swatch-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:12px}
+  .swatch{border-radius:10px;overflow:hidden;border:1px solid rgba(12,29,21,.10);background:#fff}
+  .swatch .chip{height:76px}
+  .swatch .meta{padding:10px 12px;font-size:12px}
+  .swatch .meta b{display:block;font-size:12.5px}
+  .swatch .meta code{color:var(--muted);font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
+  .provenance{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--accent);border-radius:12px;padding:16px 18px;margin-top:14px}
+  .provenance .dot{width:34px;height:34px;border-radius:50%;background:var(--accent);flex:none;margin-top:2px}
+  .provenance p{font-size:13.5px}
+  .markrow{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .tile{display:flex;align-items:center;justify-content:center;border-radius:12px;border:1px solid rgba(12,29,21,.10)}
+  .tile.light{background:var(--bg)}
+  .tile.white{background:#fff}
+  .tile.dark{background:var(--primary-dark)}
+  .tile.lg{width:132px;height:132px}
+  .tile.sm{width:44px;height:44px;border-radius:8px}
+  .tile.xs{width:24px;height:24px;border-radius:5px}
+  .lockup{display:flex;align-items:center;gap:12px}
+  table{border-collapse:collapse;width:100%;background:#fff;border:1px solid rgba(12,29,21,.10);border-radius:12px;overflow:hidden;font-size:13px}
+  th,td{text-align:left;padding:9px 14px;border-bottom:1px solid rgba(12,29,21,.08)}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  td code{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+  .pass{color:#2c6e2c;font-weight:700}
+  .decor{color:var(--accent-ink);font-weight:700}
+  .btn{display:inline-block;border-radius:8px;padding:10px 20px;font-weight:700;font-size:14px;text-decoration:none}
+  .btn.primary{background:var(--primary);color:#fff}
+  .btn.outline{border:1.5px solid var(--primary);color:var(--primary)}
+  .btn.on-dark{background:#fff;color:var(--primary-dark)}
+  .chip-paid{display:inline-block;background:var(--accent);color:var(--fg);border-radius:999px;padding:3px 12px;font-size:12px;font-weight:700}
+  ul.dd{list-style:none;font-size:13.5px}
+  ul.dd li{padding:6px 0 6px 26px;position:relative}
+  ul.dd li::before{position:absolute;left:0;font-weight:800}
+  ul.dd li.do::before{content:"✓";color:#2c6e2c}
+  ul.dd li.dont::before{content:"✕";color:#b23b3b}
+  .family{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;align-items:stretch}
+  .note{font-size:12px;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Eaverow · a Vantrow company · brand board v1 · 2026-07-19</p>
+  <h1 style="margin-top:10px"><span class="wordmark">eave<span class="row">row</span></span></h1>
+  <p style="color:var(--muted);max-width:680px;margin-top:10px">
+    The visual identity for Vantrow's roofing subsidiary. One color — camel <code>#b8956a</code>,
+    the dot in Vantrow's own mark — is copied verbatim from the parent palette and worn on the
+    <em>row</em> of the wordmark, the same syllable that echoes Van<em>trow</em>. Everything else
+    is Eaverow's own: deep pine structure on warm paper.
+  </p>
+
+  <h2>The family tie</h2>
+  <p class="lead">Same stroke grammar (round caps, one accent dot), same camel, different silhouette — sibling, not clone.</p>
+  <div class="family">
+    <div class="card" style="background:var(--vantrow-paper)">
+      <div class="markrow">
+        <svg width="92" height="92" viewBox="0 0 100 100" aria-label="Vantrow mark"><path d="M26 22 L50 83.5 L74 22" fill="none" stroke="#1b2a4e" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="23" r="10.5" fill="#b8956a"/></svg>
+        <div><h3>Vantrow (parent)</h3><p class="sub">Navy V, camel dot floating at the top — getvantrow.com</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="markrow">
+        <svg width="92" height="92" viewBox="0 0 100 100" aria-label="Eaverow concept A"><path d="M24 66 L50 30 L76 66" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="62" r="10.5" fill="#b8956a"/></svg>
+        <div><h3>Eaverow (concept A)</h3><p class="sub">The gesture inverts: Vantrow's dot floats above the V; Eaverow shelters it under the roof.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Palette</h2>
+  <p class="lead">Deep pine + camel on warm paper. Exactly one value is copied from the parent; the rest are Eaverow's own.</p>
+  <div class="swatch-row">
+    <div class="swatch"><div class="chip" style="background:#1d4b38"></div><div class="meta"><b>Primary · deep pine</b><code>#1d4b38</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#0f2e23"></div><div class="meta"><b>Primary dark · spruce</b><code>#0f2e23</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#b8956a"></div><div class="meta"><b>Accent · camel ★</b><code>#b8956a</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#856540"></div><div class="meta"><b>Accent ink</b><code>#856540</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#f7f6f2;border-bottom:1px solid rgba(12,29,21,.08)"></div><div class="meta"><b>Background · paper</b><code>#f7f6f2</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#0c1d15"></div><div class="meta"><b>Foreground · ink</b><code>#0c1d15</code></div></div>
+    <div class="swatch"><div class="chip" style="background:#566a5e"></div><div class="meta"><b>Muted</b><code>#566a5e</code></div></div>
+  </div>
+  <div class="provenance">
+    <div class="dot"></div>
+    <p><b>★ Provenance:</b> camel <code>#b8956a</code> is copied verbatim from the Vantrow palette
+    (<code>--camel</code>, the dot in the Vantrow mark; getvantrow.com, accessed 2026-07-19) — the single
+    shared family color. <b>Accent ink</b> <code>#856540</code> is our own darkened camel for AA-contrast
+    accent text on light surfaces; pure camel text on light backgrounds is reserved for the logotype
+    (WCAG 2.2 SC 1.4.3 exempts text in a logo or brand name).</p>
+  </div>
+
+  <h2>Wordmark</h2>
+  <p class="lead">Always lowercase, bold, tracking −0.02em, suffix in camel. Prose stays "Eaverow".</p>
+  <div class="grid cols-2">
+    <div class="card"><span class="wordmark" style="font-size:44px;color:var(--primary-dark)">eave<span class="row">row</span></span><p class="sub" style="margin-top:6px">On light — prefix in spruce</p></div>
+    <div class="card dark"><span class="wordmark" style="font-size:44px;color:#fff">eave<span class="row">row</span></span><p class="sub" style="margin-top:6px">On dark — prefix in white, camel holds</p></div>
+    <div class="card"><span class="wordmark" style="font-size:20px;color:var(--primary-dark)">eave<span class="row">row</span></span>&nbsp;&nbsp;&nbsp;<span class="wordmark" style="font-size:14px;color:var(--primary-dark)">eave<span class="row">row</span></span><p class="sub" style="margin-top:6px">Header (20px) and small (14px) sizes</p></div>
+    <div class="card"><span class="wordmark" style="font-size:44px;color:var(--primary-dark)">eave<span class="row">row</span><span style="color:var(--accent)">.</span></span><p class="sub" style="margin-top:6px">Concept D variant — camel full stop (optional)</p></div>
+  </div>
+
+  <h2>Logo mark — selected + alternates</h2>
+  <p class="lead">All share the family grammar: 100 viewBox, stroke 13, round caps, camel dot r 10.5. <b>Concept A was selected 2026-07-19</b> (light variant is the default; dark only on dark surfaces). B and C remain as archived alternates.</p>
+
+  <div class="grid cols-3">
+    <div class="card" style="border-color:var(--accent);border-width:2px">
+      <h3>A — Sheltered Dot <span style="color:var(--accent-ink)">✓ Selected</span></h3>
+      <p class="sub">The eave shelters the customer. Mirror-gesture of the parent V.</p>
+      <div class="markrow" style="margin-top:12px">
+        <div class="tile light lg"><svg width="92" height="92" viewBox="0 0 100 100"><path d="M24 66 L50 30 L76 66" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="62" r="10.5" fill="#b8956a"/></svg></div>
+        <div class="tile dark lg"><svg width="92" height="92" viewBox="0 0 100 100"><path d="M24 66 L50 30 L76 66" fill="none" stroke="#f7f6f2" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="62" r="10.5" fill="#b8956a"/></svg></div>
+      </div>
+      <div class="markrow" style="margin-top:12px">
+        <div class="tile white sm"><svg width="34" height="34" viewBox="0 0 100 100"><path d="M24 66 L50 30 L76 66" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="62" r="10.5" fill="#b8956a"/></svg></div>
+        <div class="tile white xs"><svg width="18" height="18" viewBox="0 0 100 100"><path d="M24 66 L50 30 L76 66" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="62" r="10.5" fill="#b8956a"/></svg></div>
+        <div class="lockup"><svg width="26" height="26" viewBox="0 0 100 100"><path d="M24 66 L50 30 L76 66" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="62" r="10.5" fill="#b8956a"/></svg><span class="wordmark" style="font-size:19px;color:var(--primary-dark)">eave<span class="row">row</span></span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>B — Three Courses</h3>
+      <p class="sub">Shingle rows reading as an "E"; the dot finishes the bottom row — the literal eave-row.</p>
+      <div class="markrow" style="margin-top:12px">
+        <div class="tile light lg"><svg width="92" height="92" viewBox="0 0 100 100"><path d="M28 30 H72" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><path d="M28 50 H60" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><path d="M28 70 H42" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><circle cx="63" cy="70" r="10.5" fill="#b8956a"/></svg></div>
+        <div class="tile dark lg"><svg width="92" height="92" viewBox="0 0 100 100"><path d="M28 30 H72" fill="none" stroke="#f7f6f2" stroke-width="13" stroke-linecap="round"/><path d="M28 50 H60" fill="none" stroke="#f7f6f2" stroke-width="13" stroke-linecap="round"/><path d="M28 70 H42" fill="none" stroke="#f7f6f2" stroke-width="13" stroke-linecap="round"/><circle cx="63" cy="70" r="10.5" fill="#b8956a"/></svg></div>
+      </div>
+      <div class="markrow" style="margin-top:12px">
+        <div class="tile white sm"><svg width="34" height="34" viewBox="0 0 100 100"><path d="M28 30 H72" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><path d="M28 50 H60" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><path d="M28 70 H42" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><circle cx="63" cy="70" r="10.5" fill="#b8956a"/></svg></div>
+        <div class="tile white xs"><svg width="18" height="18" viewBox="0 0 100 100"><path d="M28 30 H72" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><path d="M28 50 H60" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><path d="M28 70 H42" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><circle cx="63" cy="70" r="10.5" fill="#b8956a"/></svg></div>
+        <div class="lockup"><svg width="26" height="26" viewBox="0 0 100 100"><path d="M28 30 H72" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><path d="M28 50 H60" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><path d="M28 70 H42" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><circle cx="63" cy="70" r="10.5" fill="#b8956a"/></svg><span class="wordmark" style="font-size:19px;color:var(--primary-dark)">eave<span class="row">row</span></span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>C — Eave Return</h3>
+      <p class="sub">A gable over a baseline course; the dot travels the row toward home.</p>
+      <div class="markrow" style="margin-top:12px">
+        <div class="tile light lg"><svg width="92" height="92" viewBox="0 0 100 100"><path d="M26 54 L50 26 L74 54" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 74 H46" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><circle cx="68" cy="74" r="10.5" fill="#b8956a"/></svg></div>
+        <div class="tile dark lg"><svg width="92" height="92" viewBox="0 0 100 100"><path d="M26 54 L50 26 L74 54" fill="none" stroke="#f7f6f2" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 74 H46" fill="none" stroke="#f7f6f2" stroke-width="13" stroke-linecap="round"/><circle cx="68" cy="74" r="10.5" fill="#b8956a"/></svg></div>
+      </div>
+      <div class="markrow" style="margin-top:12px">
+        <div class="tile white sm"><svg width="34" height="34" viewBox="0 0 100 100"><path d="M26 54 L50 26 L74 54" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 74 H46" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><circle cx="68" cy="74" r="10.5" fill="#b8956a"/></svg></div>
+        <div class="tile white xs"><svg width="18" height="18" viewBox="0 0 100 100"><path d="M26 54 L50 26 L74 54" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 74 H46" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><circle cx="68" cy="74" r="10.5" fill="#b8956a"/></svg></div>
+        <div class="lockup"><svg width="26" height="26" viewBox="0 0 100 100"><path d="M26 54 L50 26 L74 54" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 74 H46" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round"/><circle cx="68" cy="74" r="10.5" fill="#b8956a"/></svg><span class="wordmark" style="font-size:19px;color:var(--primary-dark)">eave<span class="row">row</span></span></div>
+      </div>
+    </div>
+  </div>
+  <p class="note">Favicon (the selected mark, light variant on a paper tile): <span style="display:inline-flex;vertical-align:middle" class="tile xs"><svg width="18" height="18" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#f7f6f2"/><path d="M24 66 L50 30 L76 66" fill="none" stroke="#1d4b38" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="62" r="10.5" fill="#b8956a"/></svg></span></p>
+
+  <h2>Type</h2>
+  <p class="lead">Manrope — geometric-humanist, warm but engineered. Loaded via next/font; system sans fallback.</p>
+  <div class="card">
+    <p style="font-size:34px;font-weight:800;letter-spacing:-0.02em;color:var(--primary-dark)">Runs the whole roofing job</p>
+    <p style="font-size:21px;font-weight:700;color:var(--primary-dark);margin-top:6px">Section heading — bold 700</p>
+    <p style="font-size:15px;margin-top:6px">Body copy 400 — one app that keeps everything from lead to collected cash in one place.</p>
+    <p class="eyebrow" style="margin-top:10px">Eyebrow label — accent ink</p>
+  </div>
+
+  <h2>UI samples</h2>
+  <div class="grid cols-2">
+    <div class="card">
+      <a class="btn primary" href="#">Become a founding contractor</a>&nbsp;
+      <a class="btn outline" href="#">See a live dashboard</a>
+      <p class="sub" style="margin-top:12px">Buttons stay pine; camel never fills a button.</p>
+      <p style="margin-top:12px;font-size:13px;color:var(--muted)">Trust strip: a Vantrow company&nbsp;<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--accent);vertical-align:middle"></span>&nbsp;founding pricing locked&nbsp;<span style="display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--accent);vertical-align:middle"></span>&nbsp;free one-click export</p>
+    </div>
+    <div class="card dark">
+      <p class="eyebrow" style="color:var(--accent)">On dark, camel is AA text</p>
+      <p style="margin-top:8px;font-size:14px;color:rgba(255,255,255,.85)">Deposit invoice &nbsp;<span class="chip-paid">Paid online</span></p>
+      <p class="sub" style="margin-top:12px">Camel chips carry dark ink, never white.</p>
+      <p style="margin-top:12px"><a class="btn on-dark" href="#">See a live dashboard</a></p>
+    </div>
+  </div>
+
+  <h2>Contrast (WCAG 2.2)</h2>
+  <table>
+    <tr><th>Pair</th><th>Ratio</th><th>Verdict</th></tr>
+    <tr><td>Primary <code>#1d4b38</code> on paper</td><td>9.18</td><td class="pass">AAA — headings, links</td></tr>
+    <tr><td>White on primary</td><td>9.93</td><td class="pass">AAA — buttons</td></tr>
+    <tr><td>White on primary dark</td><td>14.63</td><td class="pass">AAA — dark band</td></tr>
+    <tr><td>Camel on primary dark</td><td>5.26</td><td class="pass">AA — dark-band eyebrows/labels</td></tr>
+    <tr><td>Accent ink <code>#856540</code> on paper / white</td><td>4.94 / 5.34</td><td class="pass">AA — accent text on light</td></tr>
+    <tr><td>Ink on camel chip</td><td>6.28</td><td class="pass">AA — paid/status chips</td></tr>
+    <tr><td>Muted on paper / white</td><td>5.37 / 5.80</td><td class="pass">AA — body secondary</td></tr>
+    <tr><td>Camel on paper</td><td>2.57</td><td class="decor">Logotype &amp; decoration only (SC 1.4.3 logo exemption)</td></tr>
+  </table>
+
+  <h2>Do / don't</h2>
+  <div class="card">
+    <ul class="dd">
+      <li class="do">Wordmark always lowercase, bold, "row" in camel; prose keeps "Eaverow".</li>
+      <li class="do">Use accent-ink for camel-colored text on light surfaces; pure camel text only in the logotype or on the dark band.</li>
+      <li class="do">Camel marks moments: milestones, paid states, bullets, eyebrows — one accent, used sparingly.</li>
+      <li class="do">Keep the parent tie visible: "a Vantrow company" links to getvantrow.com.</li>
+      <li class="dont">Don't copy more than the one camel value from Vantrow — Eaverow is a sibling, not a clone.</li>
+      <li class="dont">Don't fill buttons with camel or set camel body text on light backgrounds.</li>
+      <li class="dont">Don't restyle or soften anything on /vs-acculynx — claims, dates, and the disclaimer are legal furniture.</li>
+      <li class="dont">Don't imitate any competitor's layout, colors, or icons (clean-room protocol §6).</li>
+      <li class="dont">Don't repaint the platform's pipeline-stage hues in brand colors — they're semantic.</li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>

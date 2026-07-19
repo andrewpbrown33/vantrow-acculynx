@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Manrope } from "next/font/google";
 import { brand, brandCssVars } from "@vantrow/brand";
+import { LogoMark, Wordmark } from "@vantrow/brand/components";
 import { PlatformNav, type NavAccount } from "@/components/platform-nav";
 import { getSessionOrNull } from "@/lib/session";
 import { isSupabaseConfigured } from "@/lib/supabase/server";
@@ -13,6 +15,12 @@ export const metadata: Metadata = {
   },
   description: `Operations platform for ${brand.name} — leads, estimates, e-sign, invoices, and payments in one job pipeline.`,
 };
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  display: "swap",
+});
 
 export default async function RootLayout({
   children,
@@ -28,7 +36,7 @@ export default async function RootLayout({
     : null;
 
   return (
-    <html lang="en">
+    <html lang="en" className={manrope.variable}>
       <head>
         {/* Brand color tokens — single injection point for the whole app. */}
         <style dangerouslySetInnerHTML={{ __html: brandCssVars(brand) }} />
@@ -37,10 +45,9 @@ export default async function RootLayout({
         <div className="flex min-h-screen flex-col">
           <header className="sticky top-0 z-40 border-b border-foreground/10 bg-background/90 backdrop-blur">
             <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-4 sm:px-6">
-              <div className="flex items-baseline gap-2">
-                <span className="text-lg font-bold tracking-tight text-brand-dark">
-                  {brand.name}
-                </span>
+              <div className="flex items-center gap-2">
+                <LogoMark className="h-6 w-6 text-brand" />
+                <Wordmark className="text-lg font-bold text-brand-dark" />
                 <span className="hidden text-xs text-muted sm:inline">
                   {brand.endorsement}
                 </span>
