@@ -618,3 +618,88 @@ export async function reopenJob(jobId: string): Promise<void> {
   revalidatePath(`/jobs/${jobId}`);
   redirect(`/jobs/${jobId}`);
 }
+
+export interface PortalPayInput {
+  amountCents: number;
+}
+
+export type PortalPayResult =
+  | { ok: true; paid: boolean }
+  | { ok: false; error: string };
+
+/**
+ * PUBLIC (portal-token). Records a homeowner payment against their job's open
+ * invoice through the STUBBED PSP — a demo path, no real charge is made (the
+ * same stub `recordPayment` uses; swapping in a real processor is a clean seam
+ * here). Token-scoped and rate-limited, on the RLS-bypassing service store.
+ * Overpayment is clamped to the balance; paying it off advances the job.
+ */
+export async function payInvoiceFromPortal(
+  portalToken: string,
+  input: PortalPayInput,
+): Promise<PortalPayResult> {
+  const store = getServiceStore();
+
+  const hdrs = await headers();
+  const ip =
+    hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  if (
+    !rateLimitAllow(`portal:${portalToken}`) ||
+    !rateLimitAllow(`portal-ip:${ip}`)
+  ) {
+    return {
+      ok: false,
+      error: "Too many attempts. Please wait a minute and try again.",
+    };
+  }
+
+  const job = await store.getJobByPortalToken(portalToken);
+  if (!job) return { ok: false, error: "This link is invalid." };
+
+  const invoices = await store.listInvoices(job.id);
+  const invoice = invoices
+    .filter((i) => i.status === "open")
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+  if (!invoice) {
+    return { ok: false, error: "There's no open invoice to pay right now." };
+  }
+
+  const balance = invoice.totalCents - invoice.amountPaidCents;
+  if (balance <= 0) {
+    return { ok: false, error: "This invoice is already paid in full." };
+  }
+
+  const amountCents = Math.round(Number(input.amountCents));
+  if (!Number.isFinite(amountCents) || amountCents <= 0) {
+    return { ok: false, error: "Enter a payment amount greater than zero." };
+  }
+  const applied = Math.min(amountCents, balance);
+
+  await store.createPayment({
+    orgId: invoice.orgId,
+    invoiceId: invoice.id,
+    amountCents: applied,
+    method: "card",
+    status: "succeeded",
+    providerRef: `demo_portal_${genToken()}`,
+  });
+
+  const amountPaidCents = invoice.amountPaidCents + applied;
+  const paid = amountPaidCents >= invoice.totalCents;
+  await store.updateInvoice(invoice.id, {
+    amountPaidCents,
+    status: paid ? "paid" : invoice.status,
+  });
+  await store.createActivity({
+    orgId: invoice.orgId,
+    jobId: invoice.jobId,
+    type: "payment_recorded",
+    message: `${formatUsd(applied)} payment received via the client portal${
+      paid ? " — invoice paid in full" : ""
+    }.`,
+  });
+  if (paid) await store.updateJob(invoice.jobId, { stage: "paid" });
+
+  revalidatePath(`/portal/${portalToken}`);
+  return { ok: true, paid };
+}
