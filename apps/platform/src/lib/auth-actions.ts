@@ -31,6 +31,9 @@ async function bootstrapOrg(
     .from("memberships")
     .select("id")
     .eq("user_id", userId)
+    // #4: match the ordering used elsewhere so this idempotency check and the
+    // session resolver agree on "the" membership when duplicates exist.
+    .order("created_at", { ascending: true })
     .limit(1)
     .maybeSingle();
   if (existing.error) {
@@ -205,6 +208,8 @@ export async function signIn(
     const { data: membership } = await supabase
       .from("memberships")
       .select("org_id")
+      // #4: same earliest-wins ordering as the session resolver.
+      .order("created_at", { ascending: true })
       .limit(1)
       .maybeSingle();
     const orgId = (membership as { org_id: string } | null)?.org_id;

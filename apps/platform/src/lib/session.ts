@@ -74,6 +74,9 @@ async function resolveSupabaseSession(
     .from("memberships")
     .select("*")
     .eq("user_id", user.id)
+    // #4: deterministic pick — if a bootstrap race ever left this user with two
+    // orgs, always resolve to the earliest so their session/data stay stable.
+    .order("created_at", { ascending: true })
     .limit(1)
     .maybeSingle();
   if (error) throw new Error(`Membership lookup failed: ${error.message}`);
@@ -116,6 +119,8 @@ async function ensureOrgForUser(user: AuthUser): Promise<Session> {
     .from("memberships")
     .select("*")
     .eq("user_id", user.id)
+    // #4: earliest membership wins, so a duplicated user resolves consistently.
+    .order("created_at", { ascending: true })
     .limit(1)
     .maybeSingle();
   if (existing.error) {

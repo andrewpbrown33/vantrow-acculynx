@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { brand } from "@vantrow/brand";
 import { SignForm } from "@/components/sign-form";
+import { isSignLinkExpired } from "@/lib/sign";
 import { getServiceStore } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
@@ -60,6 +61,14 @@ export default async function SignPage({
       <Notice
         title="Not available yet"
         body="This estimate isn't ready for signature. Please contact your contractor."
+      />
+    );
+  }
+  if (isSignLinkExpired(estimate.sentAt)) {
+    return (
+      <Notice
+        title="This link has expired"
+        body="For your security, signing links expire after 30 days. Please contact your contractor for a fresh link."
       />
     );
   }
