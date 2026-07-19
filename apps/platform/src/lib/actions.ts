@@ -1,10 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { genId, genToken } from "./ids";
 import { estimateTotals, formatUsd, tierTotals } from "./money";
+import { rateLimitAllow } from "./rate-limit";
 import { getSession } from "./session";
+import { isSignLinkExpired, validateSignatureDataUrl } from "./sign";
 import { getServiceStore, getStore } from "./store";
 import type {
   Estimate,
@@ -289,6 +292,20 @@ export async function signEstimate(
   // the estimate up strictly by its unguessable token (RLS is bypassed here).
   const store = getServiceStore();
 
+  // #5: this endpoint runs as the service role — rate-limit it (per token and
+  // per client IP) so it can't be hammered with sign attempts / large payloads.
+  const hdrs = await headers();
+  const ip =
+    input.ip ??
+    hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    "unknown";
+  if (!rateLimitAllow(`sign:${token}`) || !rateLimitAllow(`sign-ip:${ip}`)) {
+    return {
+      ok: false,
+      error: "Too many attempts. Please wait a minute and try again.",
+    };
+  }
+
   const estimate = await store.getEstimateByToken(token);
   if (!estimate) {
     return { ok: false, error: "This signing link is invalid or has expired." };
@@ -298,6 +315,15 @@ export async function signEstimate(
   }
   if (estimate.status === "declined") {
     return { ok: false, error: "This estimate is no longer available." };
+  }
+  // #5: the token doesn't live forever, despite the old "invalid or expired"
+  // copy that was never actually enforced.
+  if (isSignLinkExpired(estimate.sentAt)) {
+    return {
+      ok: false,
+      error:
+        "This signing link has expired. Please ask your contractor for a new one.",
+    };
   }
   // #10: if the job was already invoiced/paid (e.g. off a different signed
   // estimate), don't let a stale link sign and regress it back to `won`.
@@ -313,8 +339,11 @@ export async function signEstimate(
   if (!TIERS.includes(input.signedTier) || !estimate.options.some((o) => o.tier === input.signedTier)) {
     return { ok: false, error: "Please choose one of the available options." };
   }
-  if (!input.imageDataUrl || !input.imageDataUrl.startsWith("data:image")) {
-    return { ok: false, error: "Please draw your signature before submitting." };
+  // #5: validate the signature is a real, size-bounded PNG/JPEG data URL — the
+  // old check only tested the `data:image` prefix, with no size cap.
+  const signatureError = validateSignatureDataUrl(input.imageDataUrl ?? "");
+  if (signatureError) {
+    return { ok: false, error: signatureError };
   }
 
   const signature = await store.createSignature({
