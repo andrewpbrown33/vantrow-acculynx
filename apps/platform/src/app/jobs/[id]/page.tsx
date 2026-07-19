@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { createInvoice } from "@/lib/actions";
+import { createInvoice, markJobDead, reopenJob } from "@/lib/actions";
 import { StageBadge } from "@/components/stage-badge";
 import { latestEstimate } from "@/lib/job";
 import { estimateTotals, formatUsd } from "@/lib/money";
@@ -242,6 +242,60 @@ export default async function JobPage({
               Opened {formatDate(job.createdAt)}
               {latest ? ` · latest estimate ${formatDate(latest.createdAt)}` : ""}
             </p>
+          </div>
+
+          {/* Job status control — kill or revive a stuck job (review #16). */}
+          <div className="mt-4 rounded-xl border border-foreground/10 bg-white p-4">
+            <h2 className="text-sm font-semibold text-foreground">Job status</h2>
+            {job.stage === "dead" ? (
+              <div className="mt-3">
+                <p className="text-sm text-muted">
+                  This job is marked dead
+                  {job.deadReason ? (
+                    <>
+                      {" "}
+                      &mdash;{" "}
+                      <span className="text-foreground">{job.deadReason}</span>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                  .
+                </p>
+                <form action={reopenJob.bind(null, job.id)} className="mt-3">
+                  <button
+                    type="submit"
+                    className="rounded-md border border-brand/40 px-3 py-1.5 text-xs font-semibold text-brand transition-colors hover:bg-brand/5"
+                  >
+                    Reopen job
+                  </button>
+                </form>
+              </div>
+            ) : (
+              <form action={markJobDead.bind(null, job.id)} className="mt-3">
+                <label
+                  htmlFor="dead-reason"
+                  className="block text-xs text-muted"
+                >
+                  Closing a job you won&rsquo;t pursue? Mark it dead to clear it
+                  off the board.
+                </label>
+                <input
+                  id="dead-reason"
+                  name="reason"
+                  type="text"
+                  maxLength={200}
+                  placeholder="Reason (optional) — e.g. went with another contractor"
+                  className="mt-2 w-full rounded-md border border-foreground/20 bg-white px-2.5 py-1.5 text-sm focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/30"
+                />
+                <button
+                  type="submit"
+                  className="mt-2 rounded-md border border-red-300 px-3 py-1.5 text-xs font-semibold text-red-700 transition-colors hover:bg-red-50"
+                >
+                  Mark job dead
+                </button>
+              </form>
+            )}
           </div>
         </aside>
       </div>
