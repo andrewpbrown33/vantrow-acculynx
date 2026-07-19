@@ -222,13 +222,30 @@ export default function OnboardingPage() {
         </section>
       </div>
 
-      <div className="mt-8 border-t border-foreground/10 pt-6 text-center">
-        <Link
-          href="/pipeline"
-          className="text-sm font-medium text-muted hover:text-foreground"
-        >
-          Skip for now &rarr; Go to dashboard
-        </Link>
+      {/* Continue into the app — a real next step for every path, including
+          concierge users who won't see the importer's success CTA. */}
+      <div className="mt-10 rounded-xl border border-brand/20 bg-brand/5 p-6 text-center">
+        <p className="text-sm font-semibold text-brand-dark">
+          Ready to get to work?
+        </p>
+        <p className="mx-auto mt-1 max-w-md text-sm text-muted">
+          Head into {brand.name} now &mdash; your imported contacts are waiting,
+          and anything we migrate for you will land straight in your pipeline.
+        </p>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            href="/pipeline"
+            className="rounded-md bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+          >
+            Go to your pipeline
+          </Link>
+          <Link
+            href="/contacts"
+            className="rounded-md border border-brand/40 px-5 py-2.5 text-sm font-semibold text-brand transition-colors hover:bg-brand/5"
+          >
+            View imported contacts
+          </Link>
+        </div>
       </div>
     </div>
   );

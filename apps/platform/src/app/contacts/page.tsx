@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { startJobFromContact } from "@/lib/migration-actions";
+import { ContactsTable, type ContactRow } from "@/components/contacts-table";
 import { getSession } from "@/lib/session";
 import { getStore } from "@/lib/store";
 
@@ -21,9 +21,31 @@ function formatDate(iso: string): string {
 export default async function ContactsPage() {
   const { org } = await getSession();
   const store = await getStore();
-  const contacts = (await store.listContacts(org.id)).sort((a, b) =>
+  const [contactsRaw, jobs] = await Promise.all([
+    store.listContacts(org.id),
+    store.listJobs(org.id),
+  ]);
+  const contacts = contactsRaw.sort((a, b) =>
     b.createdAt.localeCompare(a.createdAt),
   );
+
+  // First job per contact, so a contact already in the pipeline links to it and
+  // can't be re-added in bulk.
+  const jobByContact = new Map<string, string>();
+  for (const job of jobs) {
+    if (!jobByContact.has(job.contactId)) jobByContact.set(job.contactId, job.id);
+  }
+
+  const rows: ContactRow[] = contacts.map((c) => ({
+    id: c.id,
+    name: c.name,
+    email: c.email,
+    phone: c.phone,
+    address: c.address,
+    addedLabel: formatDate(c.createdAt),
+    jobId: jobByContact.get(c.id),
+  }));
+  const addableCount = rows.filter((r) => !r.jobId).length;
 
   return (
     <div>
@@ -35,6 +57,12 @@ export default async function ContactsPage() {
           <p className="mt-1 text-sm text-muted">
             {org.name} &middot; {contacts.length} contact
             {contacts.length === 1 ? "" : "s"}
+            {addableCount > 0 ? (
+              <>
+                {" "}
+                &middot; {addableCount} not yet in the pipeline
+              </>
+            ) : null}
           </p>
         </div>
         <Link
@@ -68,66 +96,8 @@ export default async function ContactsPage() {
           </div>
         </div>
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-xl border border-foreground/10 bg-white">
-          <table className="w-full min-w-[48rem] border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-foreground/10 text-left text-xs text-muted">
-                <th className="px-4 py-3 font-medium">Name</th>
-                <th className="px-4 py-3 font-medium">Email</th>
-                <th className="px-4 py-3 font-medium">Phone</th>
-                <th className="px-4 py-3 font-medium">Address</th>
-                <th className="px-4 py-3 font-medium">Added</th>
-                <th className="px-4 py-3 text-right font-medium">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-foreground/10">
-              {contacts.map((contact) => (
-                <tr key={contact.id} className="align-middle">
-                  <td className="px-4 py-3 font-medium text-foreground">
-                    {contact.name}
-                  </td>
-                  <td className="px-4 py-3 text-muted">
-                    {contact.email ? (
-                      <a
-                        href={`mailto:${contact.email}`}
-                        className="text-brand hover:text-brand-dark"
-                      >
-                        {contact.email}
-                      </a>
-                    ) : (
-                      "—"
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-muted">
-                    {contact.phone ? (
-                      <a
-                        href={`tel:${contact.phone}`}
-                        className="text-brand hover:text-brand-dark"
-                      >
-                        {contact.phone}
-                      </a>
-                    ) : (
-                      "—"
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-muted">{contact.address ?? "—"}</td>
-                  <td className="px-4 py-3 text-muted">
-                    {formatDate(contact.createdAt)}
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <form action={startJobFromContact.bind(null, contact.id)}>
-                      <button
-                        type="submit"
-                        className="rounded-md border border-brand/40 px-3 py-1.5 text-xs font-semibold text-brand transition-colors hover:bg-brand/5"
-                      >
-                        Start a job
-                      </button>
-                    </form>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="mt-6">
+          <ContactsTable rows={rows} />
         </div>
       )}
     </div>

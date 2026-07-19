@@ -16,6 +16,12 @@ export interface BrandConfig {
   description: string;
   /** Primary domain (no protocol), used for canonical metadata. */
   domain: string;
+  /**
+   * Base URL of the product app (the platform origin) that the marketing site
+   * links to for "Log in" / "Start free". A deploy can override this at runtime
+   * with NEXT_PUBLIC_APP_URL without touching the brand config.
+   */
+  appUrl: string;
   /** Support/contact email surfaced in the footer and fallbacks. */
   supportEmail: string;
   /** Parent-company endorsement line, e.g. "a Vantrow company". */
@@ -37,6 +43,7 @@ export const brand: BrandConfig = {
   description:
     "Eaverow is the AI-native platform that runs the back office of your roofing business and keeps every homeowner informed with a live client dashboard.",
   domain: "eaverow.com",
+  appUrl: "https://app.eaverow.com",
   supportEmail: "hello@eaverow.com",
   endorsement: "a Vantrow company",
   colors: {

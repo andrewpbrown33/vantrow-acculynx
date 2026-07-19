@@ -83,6 +83,68 @@ export async function importContacts(
 }
 
 /**
+ * Bulk version of {@link startJobFromContact}: turn many selected contacts into
+ * `lead`-stage jobs in one action, then land the user on the now-populated
+ * pipeline. This is the MIGRATE → POPULATE PIPELINE bridge — the only path from
+ * imported contacts to the board used to be clicking "Start a job" one row at a
+ * time.
+ *
+ * Dedupe: a contact that already has any job is skipped, so re-running the bulk
+ * add (or including a contact that was already started) never creates duplicate
+ * leads. IDs are de-duplicated within the batch too. The batch is capped at
+ * MAX_IMPORT_ROWS to match the importer's ceiling.
+ */
+export async function startJobsFromContacts(
+  contactIds: string[],
+): Promise<void> {
+  const { org } = await getSession();
+  const store = await getStore();
+
+  const uniqueIds = Array.from(new Set(contactIds ?? [])).slice(
+    0,
+    MAX_IMPORT_ROWS,
+  );
+  if (uniqueIds.length === 0) {
+    redirect("/pipeline");
+  }
+
+  const [contacts, jobs] = await Promise.all([
+    store.listContacts(org.id),
+    store.listJobs(org.id),
+  ]);
+  const contactById = new Map(contacts.map((c) => [c.id, c]));
+  const contactsWithJob = new Set(jobs.map((j) => j.contactId));
+
+  let created = 0;
+  for (const id of uniqueIds) {
+    const contact = contactById.get(id);
+    // Skip anything not in this org, or that already has a job (dedupe).
+    if (!contact || contactsWithJob.has(id)) continue;
+
+    const job = await store.createJob({
+      orgId: org.id,
+      contactId: contact.id,
+      title: `${contact.name} — new roof`,
+      stage: "lead",
+      leadSource: "AccuLynx import",
+      priority: "normal",
+    });
+    await store.createActivity({
+      orgId: org.id,
+      jobId: job.id,
+      type: "lead_created",
+      message: `Lead created for ${contact.name} from an imported contact.`,
+    });
+    contactsWithJob.add(id);
+    created++;
+  }
+
+  revalidatePath("/pipeline");
+  revalidatePath("/contacts");
+  redirect(created > 0 ? "/pipeline" : "/contacts");
+}
+
+/**
  * Turn an imported (or any) contact into a pipeline lead: creates a Job in the
  * `lead` stage titled "<Contact name> — new roof", tags the lead source as the
  * AccuLynx import, logs an activity, and opens the new job.
