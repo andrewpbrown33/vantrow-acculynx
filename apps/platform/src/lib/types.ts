@@ -68,6 +68,12 @@ export interface Job {
   leadSource?: string;
   priority?: JobPriority;
   deadReason?: string;
+  /**
+   * Unguessable token for the persistent homeowner portal (/portal/[token]).
+   * Generated on creation; unlike the estimate `sendToken` it does not expire
+   * and spans the whole job lifecycle.
+   */
+  portalToken?: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -575,6 +575,28 @@ export async function markJobDead(
   redirect(`/jobs/${jobId}`);
 }
 
+/**
+ * Ensure the job has a homeowner-portal token and return the portal path.
+ * Called by the contractor's "Share with homeowner" control — generates and
+ * persists the token on first share (backfills jobs created before the portal).
+ */
+export async function ensurePortalLink(
+  jobId: string,
+): Promise<{ path: string }> {
+  const { org } = await getSession();
+  const store = await getStore();
+
+  const job = await store.getJob(jobId);
+  if (!job || job.orgId !== org.id) throw new Error("Job not found.");
+
+  let token = job.portalToken;
+  if (!token) {
+    token = genToken();
+    await store.updateJob(jobId, { portalToken: token });
+  }
+  return { path: `/portal/${token}` };
+}
+
 /** Bring a dead job back to the board at the `lead` stage (review #16). */
 export async function reopenJob(jobId: string): Promise<void> {
   const { org } = await getSession();
