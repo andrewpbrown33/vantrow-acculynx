@@ -4,8 +4,9 @@ Monorepo for **Eaverow**, Vantrow's first white-label vertical-SaaS subsidiary: 
 AI-native competitor to AccuLynx for roofing contractors, connected to personalized client
 dashboards built through Vantrow.
 
-> **Name status:** "Eaverow" is chosen (Gate 1, 2026-07-16) pending same-day domain
-> registration and professional trademark clearance — see `docs/brand/naming-decision-memo-round2.md`
+> **Name status:** "Eaverow" is chosen (Gate 1, 2026-07-16) and `eaverow.com` is registered
+> and live (2026-07-19); professional trademark clearance is still pending — see
+> `docs/brand/naming-decision-memo-round2.md`
 > and `docs/runbooks/05-legal-counsel-checklist.md`. Nothing here is legal clearance.
 
 > **This repository is private and must stay private.** It contains internal competitive
@@ -46,9 +47,11 @@ In production it requires `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` — see
 - [x] Phase 1B — Naming sprint → **Eaverow** chosen
 - [x] Phase 1C — Site scaffold (brand-agnostic)
 - [x] Phase 1D — Vantrow Connect contract v0
-- [x] Gate 1 — Name selected (Eaverow); domain registration pending (Andrew)
+- [x] Gate 1 — Name selected (Eaverow); eaverow.com registered + live (2026-07-19)
 - [ ] Phase 2 — Brand applied + marketing copy (brand applied; copy pending teardown)
 - [x] Phase 3 — Runbooks + CI (PR pending base branch)
-- [ ] Gate 2 — Launch (domain, Vercel, Supabase live)
+- [~] Gate 2 — Launch (domain live; Vercel serving the platform on the apex — remap per
+  runbook 02: marketing site (`apps/site`) on `eaverow.com`, platform on `app.eaverow.com`;
+  Supabase status unconfirmed)
 - [ ] Phase 4 (deferred) — vantrow-web AEO page port, LinkedIn
 - [ ] Phase 5 (deferred) — Product platform build (`apps/platform/`)
