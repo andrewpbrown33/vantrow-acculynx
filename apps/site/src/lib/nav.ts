@@ -6,6 +6,25 @@
  * site outside that page.
  */
 
+import { brand } from "@vantrow/brand";
+
+/**
+ * The product app (platform) origin. Defaults to the brand config's `appUrl`,
+ * but a deploy can point the marketing site at a different app host by setting
+ * NEXT_PUBLIC_APP_URL (e.g. a preview or staging URL) without a code change.
+ * Trailing slash trimmed so we can safely append paths.
+ */
+const appOrigin = (process.env.NEXT_PUBLIC_APP_URL ?? brand.appUrl).replace(
+  /\/+$/,
+  "",
+);
+
+/** Absolute links into the product app for account entry points. */
+export const appLinks = {
+  signup: `${appOrigin}/signup`,
+  login: `${appOrigin}/login`,
+} as const;
+
 export const routes = {
   home: "/",
   product: "/product",

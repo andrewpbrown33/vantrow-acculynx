@@ -56,6 +56,7 @@ export default async function PipelinePage() {
   const columns = STAGE_ORDER.map((stage) => ({ stage, cards: byStage[stage] }));
   const deadCards = byStage.dead;
   const totalJobs = columns.reduce((n, c) => n + c.cards.length, 0);
+  const isEmpty = entries.length === 0;
 
   return (
     <div>
@@ -65,18 +66,63 @@ export default async function PipelinePage() {
             Pipeline
           </h1>
           <p className="mt-1 text-sm text-muted">
-            {org.name} &middot; {totalJobs} active job
-            {totalJobs === 1 ? "" : "s"}
+            {isEmpty ? (
+              <>{org.name} &middot; Ready to import</>
+            ) : (
+              <>
+                {org.name} &middot; {totalJobs} active job
+                {totalJobs === 1 ? "" : "s"}
+              </>
+            )}
           </p>
         </div>
-        <Link
-          href="/leads/new"
-          className="rounded-md bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
-        >
-          New lead
-        </Link>
+        {!isEmpty && (
+          <Link
+            href="/leads/new"
+            className="rounded-md bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+          >
+            New lead
+          </Link>
+        )}
       </div>
 
+      {isEmpty ? (
+        <div className="mt-10 rounded-2xl border border-dashed border-foreground/15 bg-foreground/[0.02] px-6 py-16 text-center">
+          <h2 className="text-xl font-bold tracking-tight text-brand-dark">
+            Your pipeline is empty &mdash; let&rsquo;s fill it
+          </h2>
+          <p className="mx-auto mt-2 max-w-md text-sm text-muted">
+            Bring your leads and jobs over from AccuLynx, or add your first lead
+            by hand. Everything from the first call to collected cash lives
+            here.
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/onboarding"
+              className="rounded-md bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+            >
+              Import from AccuLynx
+            </Link>
+            <Link
+              href="/leads/new"
+              className="rounded-md border border-brand/40 px-5 py-2.5 text-sm font-semibold text-brand transition-colors hover:bg-brand/5"
+            >
+              Add a lead manually
+            </Link>
+          </div>
+          <p className="mt-6 text-xs text-muted">
+            Already imported contacts?{" "}
+            <Link
+              href="/contacts"
+              className="font-medium text-brand underline underline-offset-2 hover:text-brand-dark"
+            >
+              Add them to your pipeline
+            </Link>
+            .
+          </p>
+        </div>
+      ) : (
+        <>
       <div className="mt-6 flex gap-4 overflow-x-auto pb-4">
         {columns.map(({ stage, cards }) => {
           const meta = STAGE_META[stage];
@@ -153,6 +199,8 @@ export default async function PipelinePage() {
             ))}
           </ul>
         </section>
+      )}
+        </>
       )}
     </div>
   );

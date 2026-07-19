@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { brand } from "@vantrow/brand";
-import { primaryNav, routes } from "@/lib/nav";
+import { appLinks, primaryNav, routes } from "@/lib/nav";
 
 export function Header() {
   return (
@@ -25,12 +25,20 @@ export function Header() {
           ))}
         </nav>
 
-        <Link
-          href={routes.earlyAccess}
-          className="rounded-md bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
-        >
-          Get early access
-        </Link>
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Link
+            href={appLinks.login}
+            className="text-sm font-medium text-muted transition-colors hover:text-foreground"
+          >
+            Log in
+          </Link>
+          <Link
+            href={appLinks.signup}
+            className="rounded-md bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+          >
+            Start free
+          </Link>
+        </div>
       </div>
     </header>
   );
