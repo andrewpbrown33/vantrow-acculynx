@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { brand } from "@vantrow/brand";
+import { PortalPayForm } from "@/components/portal-pay-form";
 import { PortalStatus } from "@/components/portal-status";
 import { estimateTotals, formatUsd } from "@/lib/money";
 import { getServiceStore } from "@/lib/store";
@@ -183,9 +184,10 @@ export default async function PortalPage({
           ) : invoice.status === "void" ? (
             <p className="mt-3 text-sm text-muted">This invoice was voided.</p>
           ) : (
-            <p className="mt-3 text-sm text-muted">
-              {orgName} will reach out about payment.
-            </p>
+            <PortalPayForm
+              token={token}
+              balanceCents={invoice.totalCents - invoice.amountPaidCents}
+            />
           )}
         </section>
       )}
