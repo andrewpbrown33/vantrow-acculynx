@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { signEstimate } from "@/lib/actions";
+import { declineEstimate, signEstimate } from "@/lib/actions";
 import { estimateTotals, formatUsd } from "@/lib/money";
 import type { Estimate, EstimateTier } from "@/lib/types";
 import { SignaturePad } from "@/components/signature-pad";
@@ -40,7 +40,20 @@ export function SignForm({
   const [signature, setSignature] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [declined, setDeclined] = useState(false);
   const [pending, startTransition] = useTransition();
+
+  function decline() {
+    setError(null);
+    startTransition(async () => {
+      const result = await declineEstimate(token);
+      if (result.ok) {
+        setDeclined(true);
+      } else {
+        setError(result.error);
+      }
+    });
+  }
 
   const selectedTotals = useMemo(
     () =>
@@ -90,6 +103,24 @@ export function SignForm({
           Your signature has been recorded. {orgName} will see your approved{" "}
           {tier ? TIER_LABEL[tier].toLowerCase() : ""} option in their dashboard
           and follow up with next steps.
+        </p>
+      </div>
+    );
+  }
+
+  if (declined) {
+    return (
+      <div
+        role="status"
+        className="rounded-xl border border-foreground/15 bg-foreground/[0.02] p-8 text-center"
+      >
+        <h2 className="text-xl font-bold text-brand-dark">
+          Thanks for letting us know
+        </h2>
+        <p className="mt-2 text-muted">
+          You&rsquo;ve declined this estimate. {orgName} will see that in their
+          dashboard &mdash; reach out to them if you&rsquo;d like a revised
+          quote.
         </p>
       </div>
     );
@@ -207,6 +238,18 @@ export function SignForm({
       >
         {pending ? "Submitting…" : "Sign & approve"}
       </button>
+
+      <p className="text-center text-sm text-muted">
+        Not ready to approve?{" "}
+        <button
+          type="button"
+          onClick={decline}
+          disabled={pending}
+          className="font-medium text-muted underline underline-offset-2 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          Decline this estimate
+        </button>
+      </p>
     </form>
   );
 }

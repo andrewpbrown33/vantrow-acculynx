@@ -56,7 +56,15 @@ export default async function SignPage({
       />
     );
   }
-  if (estimate.status === "declined" || estimate.status === "draft") {
+  if (estimate.status === "declined") {
+    return (
+      <Notice
+        title="Estimate declined"
+        body={`You've declined this estimate. ${orgName} will see that and can follow up — reach out to them if you'd like a revised quote.`}
+      />
+    );
+  }
+  if (estimate.status === "draft") {
     return (
       <Notice
         title="Not available yet"

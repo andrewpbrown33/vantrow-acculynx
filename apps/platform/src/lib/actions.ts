@@ -494,3 +494,105 @@ export async function recordPayment(
   revalidatePath(`/invoices/${invoiceId}`);
   return { ok: true, paid };
 }
+
+/**
+ * PUBLIC (tokenized). Lets the homeowner decline an estimate instead of signing
+ * — makes the `declined` status reachable (review #16). Same guards as
+ * signEstimate (rate limit, expiry, already-signed). Idempotent if re-declined.
+ */
+export async function declineEstimate(token: string): Promise<SignResult> {
+  const store = getServiceStore();
+
+  const hdrs = await headers();
+  const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  if (!rateLimitAllow(`sign:${token}`) || !rateLimitAllow(`sign-ip:${ip}`)) {
+    return {
+      ok: false,
+      error: "Too many attempts. Please wait a minute and try again.",
+    };
+  }
+
+  const estimate = await store.getEstimateByToken(token);
+  if (!estimate) {
+    return { ok: false, error: "This signing link is invalid or has expired." };
+  }
+  if (estimate.status === "signed") {
+    return { ok: false, error: "This estimate has already been signed." };
+  }
+  if (estimate.status === "declined") {
+    return { ok: true, jobId: estimate.jobId }; // already declined — no-op
+  }
+  if (isSignLinkExpired(estimate.sentAt)) {
+    return {
+      ok: false,
+      error:
+        "This signing link has expired. Please ask your contractor for a new one.",
+    };
+  }
+
+  await store.updateEstimate(estimate.id, { status: "declined" });
+  await store.createActivity({
+    orgId: estimate.orgId,
+    jobId: estimate.jobId,
+    type: "job_updated",
+    message: "Homeowner declined the estimate.",
+  });
+
+  revalidatePath(`/sign/${token}`);
+  revalidatePath(`/jobs/${estimate.jobId}`);
+  return { ok: true, jobId: estimate.jobId };
+}
+
+/**
+ * Manually kill a stuck job — moves it to the `dead` stage with an optional
+ * reason (review #16: `dead` was previously unreachable, so a stalled job
+ * couldn't be cleared off the board).
+ */
+export async function markJobDead(
+  jobId: string,
+  formData: FormData,
+): Promise<void> {
+  const { org } = await getSession();
+  const store = await getStore();
+
+  const job = await store.getJob(jobId);
+  if (!job || job.orgId !== org.id) throw new Error("Job not found.");
+
+  const reason = str(formData.get("reason"));
+  await store.updateJob(jobId, {
+    stage: "dead",
+    deadReason: reason || undefined,
+  });
+  await store.createActivity({
+    orgId: org.id,
+    jobId,
+    type: "job_updated",
+    message: reason ? `Job marked dead: ${reason}` : "Job marked dead.",
+  });
+
+  revalidatePath("/pipeline");
+  revalidatePath(`/jobs/${jobId}`);
+  redirect(`/jobs/${jobId}`);
+}
+
+/** Bring a dead job back to the board at the `lead` stage (review #16). */
+export async function reopenJob(jobId: string): Promise<void> {
+  const { org } = await getSession();
+  const store = await getStore();
+
+  const job = await store.getJob(jobId);
+  if (!job || job.orgId !== org.id) throw new Error("Job not found.");
+  if (job.stage !== "dead") redirect(`/jobs/${jobId}`); // nothing to reopen
+
+  await store.updateJob(jobId, { stage: "lead" });
+  await store.createActivity({
+    orgId: org.id,
+    jobId,
+    type: "job_updated",
+    message: "Job reopened.",
+  });
+
+  revalidatePath("/pipeline");
+  revalidatePath(`/jobs/${jobId}`);
+  redirect(`/jobs/${jobId}`);
+}
