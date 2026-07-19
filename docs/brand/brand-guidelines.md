@@ -1,7 +1,7 @@
 # Eaverow Brand Guidelines
 
-**Status:** v1, 2026-07-19 (Gate 2 — visual identity). Logo mark selection pending; everything
-else here is applied in `packages/brand/src/brand.config.ts` and live on the site.
+**Status:** v1.1, 2026-07-19 (Gate 2 — visual identity, complete). Mark selected: **Concept A
+"Sheltered Dot."** Applied in `packages/brand/` and live across site + platform.
 Visual companion: `docs/brand/assets/brand-board.html`.
 
 ## 1. Brand architecture & the family tie
@@ -63,25 +63,31 @@ Camel as *paint* (dots, hairlines, chips, the wordmark suffix, dark-band labels)
   suffix holds on both.
 - **Prose always uses "Eaverow"** (capital E). Lowercase belongs to the wordmark only.
 
-## 4. Logo mark — concepts pending selection
+## 4. Logo mark — "Sheltered Dot" (selected 2026-07-19)
 
-Three candidate marks live in `docs/brand/assets/` (light + `-dark` variants, paths-only SVG).
-All share the family grammar — 100 viewBox, stroke 13, round caps/joins, camel dot r 10.5 —
-with silhouettes distinct from the parent's V:
+The Eaverow mark is **Concept A, "Sheltered Dot"**: a gable stroke with the camel dot
+sheltered beneath the eave — the mirror-gesture of Vantrow's dot floating above its V.
+Family grammar: 100 viewBox, stroke 13, round caps/joins, camel dot r 10.5 at (50, 62);
+gable path `M24 66 L50 30 L76 66`. Shipped as the shared `LogoMark` component
+(`packages/brand/src/components.tsx`); canonical SVGs in `docs/brand/assets/`
+(`concept-a-sheltered-dot.svg` + `-dark.svg`).
 
-| Concept | File | Idea |
-|---|---|---|
-| **A — Sheltered Dot** (recommended) | `concept-a-sheltered-dot.svg` | Gable stroke with the camel dot sheltered beneath the eave — the mirror-gesture of Vantrow's dot floating above its V |
-| B — Three Courses | `concept-b-three-courses.svg` | Three shingle courses reading as an "E"; the dot terminates the bottom row (the literal eave-row) |
-| C — Eave Return | `concept-c-eave-return.svg` | A gable over a baseline course; the dot travels the row toward home |
-| D — Wordmark-only | (brand board) | No pictorial mark; optional camel full stop |
+**Variants — light is the default.**
+- **Light variant** (pine stroke `#1d4b38` + camel dot): the default everywhere — light and
+  mid surfaces, favicons, OG, print.
+- **Dark variant** (paper stroke `#f7f6f2` + camel dot): situational only, for dark surfaces
+  (e.g. the `bg-brand-dark` band). Never the default rendering of the brand.
+- In code the variant is automatic: `LogoMark` strokes with `currentColor`, so the call
+  site's text color picks it (`text-brand` on light chrome; white/paper text on dark).
 
-Until Andrew picks one, the site ships **wordmark-only**, and both apps use the neutral
-placeholder favicon (pine tile + camel dot, `apps/*/src/app/icon.svg`). After selection:
-promote the chosen geometry into a shared `LogoMark` component, regenerate favicons/OG from
-it, and update this section. Usage rules that will apply to any pick: clear space ≥ the dot
-diameter on all sides; minimum size 16px; never recolor the dot; never place the mark on
-mid-tone backgrounds that sink the camel.
+**Usage rules:** clear space ≥ the dot diameter on all sides; minimum size 16px; never
+recolor the dot; never place the mark on mid-tone backgrounds that sink the camel.
+Lockup: mark + two-tone wordmark, mark at ~1.3× the wordmark cap height, gap ≈ half the
+dot diameter (as shipped in the site/platform headers).
+
+**Unselected concepts** — B "Three Courses" and C "Eave Return" remain in
+`docs/brand/assets/` as archived alternates for the record; they are not brand assets and
+must not be used.
 
 ## 5. Typography
 
@@ -114,8 +120,8 @@ each unavoidable and to be kept in sync by hand:
 
 ## 8. Follow-ups
 
-- Logo mark selection (A/B/C/D) → shared `LogoMark`, real favicon set (ICO + manifest PNGs per
-  the Evil Martians minimal set), OG image with the mark.
+- Full favicon set (ICO fallback + manifest PNGs per the Evil Martians minimal set) when the
+  installable PWA milestone lands; SVG favicon + apple-touch icon ship today.
 - Platform auth/portal pages still render plain `{brand.name}` text — swap to `<Wordmark />`
-  in the platform design pass.
+  (and the `LogoMark` lockup where fitting) in the platform design pass.
 - Promote type/spacing scale into brand tokens when subsidiary #2 spins up.

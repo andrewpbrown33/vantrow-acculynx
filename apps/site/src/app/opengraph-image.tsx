@@ -6,10 +6,10 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 /**
- * Social share card: the two-tone lowercase wordmark on brand paper, with the
- * tagline and parent endorsement. Rendered with next/og's bundled default
- * font (satori can't consume the app's woff2), so it deliberately leans on
- * the palette rather than the typeface for brand feel.
+ * Social share card: the "Sheltered Dot" mark over the two-tone lowercase
+ * wordmark on brand paper, with the tagline and parent endorsement. Rendered
+ * with next/og's bundled default font (satori can't consume the app's woff2),
+ * so it deliberately leans on the mark + palette for brand feel.
  */
 export default function OgImage() {
   const { prefix, suffix } = splitWordmark(brand);
@@ -28,10 +28,22 @@ export default function OgImage() {
           backgroundColor: c.background,
         }}
       >
+        <svg viewBox="0 0 100 100" width={110} height={110}>
+          <path
+            d="M24 66 L50 30 L76 66"
+            fill="none"
+            stroke={c.primary}
+            strokeWidth={13}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <circle cx={50} cy={62} r={10.5} fill={c.accent} />
+        </svg>
         <div
           style={{
             display: "flex",
-            fontSize: 148,
+            marginTop: 34,
+            fontSize: 132,
             fontWeight: 700,
             letterSpacing: "-0.03em",
             color: c.primaryDark,

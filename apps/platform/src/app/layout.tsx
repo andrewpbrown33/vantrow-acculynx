@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import { brand, brandCssVars } from "@vantrow/brand";
-import { Wordmark } from "@vantrow/brand/components";
+import { LogoMark, Wordmark } from "@vantrow/brand/components";
 import { PlatformNav, type NavAccount } from "@/components/platform-nav";
 import { getSessionOrNull } from "@/lib/session";
 import { isSupabaseConfigured } from "@/lib/supabase/server";
@@ -45,7 +45,8 @@ export default async function RootLayout({
         <div className="flex min-h-screen flex-col">
           <header className="sticky top-0 z-40 border-b border-foreground/10 bg-background/90 backdrop-blur">
             <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-4 sm:px-6">
-              <div className="flex items-baseline gap-2">
+              <div className="flex items-center gap-2">
+                <LogoMark className="h-6 w-6 text-brand" />
                 <Wordmark className="text-lg font-bold text-brand-dark" />
                 <span className="hidden text-xs text-muted sm:inline">
                   {brand.endorsement}
