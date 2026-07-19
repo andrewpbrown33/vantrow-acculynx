@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { brand } from "@vantrow/brand";
+import { PortalCheckoutButton } from "@/components/portal-checkout-button";
 import { PortalPayForm } from "@/components/portal-pay-form";
 import { PortalStatus } from "@/components/portal-status";
 import { estimateTotals, formatUsd } from "@/lib/money";
 import { getServiceStore } from "@/lib/store";
+import { isStripeConfigured } from "@/lib/stripe";
 import type { ActivityType } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -183,7 +185,14 @@ export default async function PortalPage({
             </p>
           ) : invoice.status === "void" ? (
             <p className="mt-3 text-sm text-muted">This invoice was voided.</p>
+          ) : isStripeConfigured() && org?.stripeChargesEnabled ? (
+            // Contractor is set up with Stripe — take a real card payment.
+            <PortalCheckoutButton
+              token={token}
+              balanceCents={invoice.totalCents - invoice.amountPaidCents}
+            />
           ) : (
+            // Fallback: demo stub (no processor configured for this contractor).
             <PortalPayForm
               token={token}
               balanceCents={invoice.totalCents - invoice.amountPaidCents}
